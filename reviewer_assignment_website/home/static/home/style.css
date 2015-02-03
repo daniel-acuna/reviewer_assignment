@@ -50,8 +50,10 @@ a small {
   display: block;
   text-align: right;
   font-size: 14px;
-  width: 500px;
+  width: 100%;
   float: right;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 2em;
 
 }
 
@@ -77,6 +79,10 @@ a small {
 
 .pagetab a {
   color:#777;
+}
+
+.pagetab a:hover {
+  text-decoration: none;  
 }
 
 .wrapper {
@@ -252,7 +258,7 @@ footer {
     top:52px;
   }
   div.pagetab {
-    width: auto;
+    width: 100%;
     float: center;
   }
 }
@@ -274,7 +280,7 @@ footer {
     word-wrap:normal;
   }
   div.pagetab {
-    width: auto;
+    width: 100%;
     float: center;
   }
 }
@@ -288,7 +294,7 @@ footer {
     display:none;
   }
   div.pagetab {
-    width: auto;
+    width: 100%;
     float: center;
   }
 }
@@ -300,7 +306,7 @@ footer {
     color:#444;
   }
   div.pagetab {
-    width: auto;
+    width: 100%;
     float: center;
   }
 }
