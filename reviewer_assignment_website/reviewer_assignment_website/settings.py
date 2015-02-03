@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'home',
     'review_assign',
     'review_scoring',
+    'ajaxuploader'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -105,4 +106,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/dev/howto/static-files/
 
+MEDIA_ROOT = '/home/daniel/Documents/workspace/reviewer_assignment/reviewer_assignment_website/media/'
+
 STATIC_URL = '/static/'
+STATIC_ROOT = '/home/daniel/Documents/workspace/reviewer_assignment/reviewer_assignment_website/files/'
