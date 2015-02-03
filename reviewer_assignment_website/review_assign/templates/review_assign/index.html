@@ -1,25 +1,77 @@
 <!doctype html>
     <head>
+        {% load staticfiles %}
+        <link rel="stylesheet" type="text/css" href="{% static 'home/bootstrap.css' %}" />
+        <link rel="stylesheet" type="text/css" href="{% static 'home/style.css' %}" />
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js" ></script>
         <script src="{{ STATIC_URL }}ajaxuploader/js/fileuploader.js" ></script>
         <link href="{{ STATIC_URL }}ajaxuploader/css/fileuploader.css" media="screen" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="{% static 'home/font-awesome/css/font-awesome.min.css' %}">
         <script>
             $(function(){
             var uploader = new qq.FileUploader({
                 action: "/assignment/ajax-upload",
                 element: $('#file-uploader')[0],
-                multiple: true,
+                multiple: false,
                 onComplete: function(id, fileName, responseJSON) {
                     if(responseJSON.success) {
-                        alert("success!");
+                        alert("Success!");
                     } else {
-                        alert("upload failed!");
+                        alert("Upload failed!");
                     }
                 },
                 onAllComplete: function(uploads) {
                     // uploads is an array of maps
                     // the maps look like this: {file: FileObject, response: JSONServerResponse}
-                    alert("All complete!");
+                    alert("Upload complete!");
+                },
+                params: {
+                    'csrf_token': '{{ csrf_token }}',
+                    'csrf_name': 'csrfmiddlewaretoken',
+                    'csrf_xname': 'X-CSRFToken',
+                },
+            });
+            });
+            $(function(){
+            var uploader = new qq.FileUploader({
+                action: "/assignment/ajax-upload",
+                element: $('#file-uploader2')[0],
+                multiple: false,
+                onComplete: function(id, fileName, responseJSON) {
+                    if(responseJSON.success) {
+                        alert("Success!");
+                    } else {
+                        alert("Upload failed!");
+                    }
+                },
+                onAllComplete: function(uploads) {
+                    // uploads is an array of maps
+                    // the maps look like this: {file: FileObject, response: JSONServerResponse}
+                    alert("Upload complete!");
+                },
+                params: {
+                    'csrf_token': '{{ csrf_token }}',
+                    'csrf_name': 'csrfmiddlewaretoken',
+                    'csrf_xname': 'X-CSRFToken',
+                },
+            });
+            });
+            $(function(){
+            var uploader = new qq.FileUploader({
+                action: "/assignment/ajax-upload",
+                element: $('#file-uploader3')[0],
+                multiple: false,
+                onComplete: function(id, fileName, responseJSON) {
+                    if(responseJSON.success) {
+                        alert("Success!");
+                    } else {
+                        alert("Upload failed!");
+                    }
+                },
+                onAllComplete: function(uploads) {
+                    // uploads is an array of maps
+                    // the maps look like this: {file: FileObject, response: JSONServerResponse}
+                    alert("Upload complete!");
                 },
                 params: {
                     'csrf_token': '{{ csrf_token }}',
@@ -31,10 +83,60 @@
         </script>
     </head>
 <body>
-    <div id="file-uploader">       
-        <noscript>          
-            <p>Please enable JavaScript to use file uploader.</p>
-        </noscript>         
+    <div class="container">
+        <!-- <ul class="nav nav-tabs">
+            <li role="presentation" class="active"><a href="#">Main</a></li>
+            <li role="presentation"><a href="#">Submit Assignment</a></li>
+            <li role="presentation"><a href="#">Documentation</a></li>
+        </ul> -->
+        <div class="pagetab"> <!-- tabs go here -->
+            <li><a href="../">Main</a></li>
+            <li><a href="./">Start Assignment</a></li>
+            <li><a href="">Documentation</a></li>
+        </div>
+
+    <div class="col-md-12">
+        <h2><b>Reviewer Assignment Uploader</b></h2>
     </div>
+
+    <div class="col-md-12">
+    <p>
+        There are 2 files that we need for the reviewer assignment:
+        <li> Papers information <code>.csv</code> file where columns contain <code>PaperID, Title, Abstract, PersonID list</code>. Recommended delemiter for the  is <code>,</code> or <code>\t</code>. Example of the csv file is showed below.
+        <li> PersonID and Fullname <code>.csv</code> file which has two columns contain <code>PersonID, FullName</code> as shown in example below.
+        <li> Reviewers Abstract <code>.csv</code> which has two columns: <code>PersonID, Abstract</code>.
+    </p>
+        
+    </div>
+
+    <p>
+    <tr>
+    <h3>Paper information</h3>
+    <div id="file-uploader" class="qq-upload-list">
+        <noscript>
+            <p>Please enable JavaScript to use file uploader.</p>
+        </noscript>
+    </div>
+    <h3>People</h3>
+    <div id="file-uploader2" class="qq-upload-list"> 
+        <noscript>         
+            <p>Please enable JavaScript to use file uploader.</p>
+        </noscript>    
+    </div>
+    <h3>Reviewers</h3>
+    <div id="file-uploader3" class="qq-upload-list"> 
+        <noscript>         
+            <p>Please enable JavaScript to use file uploader.</p>
+        </noscript>    
+    </div>
+    </tr>
+    </p>
+
+    <p>
+    <a class="btn btn-primary btn-lg" href="" role="button"> <i class="fa fa-play"></i>  Start Matching</a> <br>
+    </p>
+
+
+
 </body>
 </html>
