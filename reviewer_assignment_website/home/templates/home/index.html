@@ -2,7 +2,8 @@
 {% load staticfiles %}
 <link rel="stylesheet" type="text/css" href="{% static 'home/bootstrap.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'home/style.css' %}" />
-<link rel="stylesheet" href="home/font-awesome/css/font-awesome.min.css">
+<link rel="stylesheet" href="{% static 'home/font-awesome/css/font-awesome.min.css' %}">
+
 <html>
 <head>
     <title>Reviewer Assignment</title>
@@ -23,45 +24,50 @@
         </div>
 
     <div class="col-md-12">
-        <h2>Automatic Reviewer Assignment</h2>
+        <h2><b>Automatic Reviewer Assignment</b></h2>
     </div>
     
     <div class="col-md-12">
         <h3>About</h3>
         <p>
-            Website for automatic reviewer assignment. We apply text based analysis to match submitted candidate and reviewers in conference. This developed technique has been used in COSYNE 2015 (see this link) and the feedback was great. 
+            Website for automatic reviewer assignment. We apply text based analysis to match submitted articles to reviewers. 
         </p>
         
         <p>
-            Click button below to start automatic reviewer assignment!
+            Click button below to start the automatic reviewer assignment!
         </p>
     </div>
 
-    <div class="col-md-12 submit-button"><center>
-        <p><a class="btn btn-primary btn-lg" href="#" role="button">Submit Assignment</a></p>
-    </center></div>
+    <div class="col-md-12 submit-button">
+    <center>
+        <p>
+            <a class="btn btn-primary btn-lg" href="assignment" role="button">Start Assignment</a> <br>
+        </p>
+    </center>
+        <p> <a href="#">Do you have the reviewers' scores and want to estimate the score of each article?<br></a> </p>
+    </div>
 
     <div class="col-md-12">
         <h3>Usage</h3>
         <p>
-            Click the button above to start the process. You can submit <code>.csv</code> file that contain columns as follows. 
+            Click the button above to start the process. You can submit the <code>.csv</code> files that contain the following information. 
         </p>
         
         <p>
-            Software are publicly available on Github and : https://github.com/daniel-acuna/reviewer_assignment
+            Our software is publicly available on Github at : https://github.com/daniel-acuna/reviewer_assignment
         </p>
     </div>
     
     <div class="col-md-12">
-        <h3> Member </h3>
+        <h3>Members</h3>
         <p>
-            Contact: Daniel Acuna, Titipat Achakulvisut<br>
-            Kording Lab RM 1479<br>
+            <i class="fa fa-user"></i> Daniel Acuna, Titipat Achakulvisut, Tulakan Ruangrong, Konrad Kording<br>
+            <i class="fa fa-location-arrow"></i> Kording Lab, 345 E Superior St RM 1479<br>
             Rehabilitation Institute of Chicago<br>
             Northwestern University<br>
-            Tweeter: https://twitter.com/KordingLab<br>
-            Lab website: http://klab.smpp.northwestern.edu/wiki/index.php5/Main_Page<br>
-            <i class="fa fa-github"></i> Github: https://github.com/daniel-acuna/reviewer_assignment<br>
+            <i class="fa fa-twitter"></i> Tweeter: https://twitter.com/KordingLab<br>
+            <i class="fa fa-university"></i> Lab website: http://klab.smpp.northwestern.edu/wiki/index.php5/Main_Page<br>
+            <i class="fa fa-github-alt"></i> <b>Github</b>  https://github.com/daniel-acuna/reviewer_assignment<br>
         </p>
     </div>
 </body>
