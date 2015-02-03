@@ -1,7 +1,61 @@
 <!DOCTYPE html>
+{% load staticfiles %}
+<link rel="stylesheet" type="text/css" href="{% static 'home/style.css' %}" />
 <html>
-  <body>
-    <h1>My First Heading</h1>
-    <p>My first paragraph.</p>
-  </body>
+<head>
+    <title>Reviewer Assignment</title>
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="pagetab"> <!-- tabs go here -->
+          <li>
+            <a href="./">Main</a>
+          </li>
+          <li>
+            <a href="">Submit Assignment</a>
+          </li>
+          <li>
+            <a href="">Documentation</a>
+          </li>
+          <hr>
+    </div>
+
+    <h1>
+    Automatic Reviewer Assignment
+    </h1>
+    
+    <h2>About</h2>
+    <p>
+    Website for automatic reviewer assignment. We apply text based analysis to match submitted candidate and reviewers in conference. This developed technique has been used in COSYNE 2015 (see this link) and the feedback was great. 
+    </p>
+    
+    <p>
+    Click button below to start automatic reviewer assignment
+    <center> <b>Submit Assignment</b> </center>
+    </p>
+
+    <h2>Usage</h2>
+    <p>
+    Click the button above to start the process. You can submit <code>.csv</code> file that contain columns as follows. 
+    </p>
+    
+    <p>
+        Software are publicly available on Github and : https://github.com/daniel-acuna/reviewer_assignment
+    </p>
+    
+
+    <h2> Member </h2>
+    <p>
+        Contact: Daniel Acuna, Titipat Achakulvisut<br>
+        Kording Lab RM 1479<br>
+        Rehabilitation Institute of Chicago<br>
+        Northwestern University<br>
+        Tweeter: https://twitter.com/KordingLab<br>
+        Lab website: http://klab.smpp.northwestern.edu/wiki/index.php5/Main_Page<br>
+        Github: https://github.com/daniel-acuna/reviewer_assignment<br>
+    </p>
+</body>
+
+
 </html>
