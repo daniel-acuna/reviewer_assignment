@@ -80,6 +80,30 @@
                 },
             });
             });
+            $(function(){
+            var uploader = new qq.FileUploader({
+                action: "/assignment/ajax-upload",
+                element: $('#file-uploader4')[0],
+                multiple: false,
+                onComplete: function(id, fileName, responseJSON) {
+                    if(responseJSON.success) {
+                        alert("Success!");
+                    } else {
+                        alert("Upload failed!");
+                    }
+                },
+                onAllComplete: function(uploads) {
+                    // uploads is an array of maps
+                    // the maps look like this: {file: FileObject, response: JSONServerResponse}
+                    alert("Upload complete!");
+                },
+                params: {
+                    'csrf_token': '{{ csrf_token }}',
+                    'csrf_name': 'csrfmiddlewaretoken',
+                    'csrf_xname': 'X-CSRFToken',
+                },
+            });
+            });
         </script>
     </head>
 <body>
@@ -90,9 +114,9 @@
             <li role="presentation"><a href="#">Documentation</a></li>
         </ul> -->
         <div class="pagetab"> <!-- tabs go here -->
-            <li><a href="../">Main</a></li>
+            <li><a href="../">Home</a></li>
             <li><a href="./">Start Assignment</a></li>
-            <li><a href="">Documentation</a></li>
+            <li><a href="./">Documentation</a></li>
         </div>
 
     <div class="col-md-12">
@@ -101,8 +125,8 @@
 
     <div class="col-md-12">
     <p>
-        There are 2 files that we need for the reviewer assignment:
-        <li> Papers information <code>.csv</code> file where columns contain <code>PaperID, Title, Abstract, PersonID list</code>. Recommended delemiter for the  is <code>,</code> or <code>\t</code>. Example of the csv file is showed below.
+        There are 3 files that we need for the reviewer assignment:
+        <li> Papers information <code>.csv</code> file where columns contain <code>PaperID, Title, Abstract, PersonID list</code>. Recommended delimiter for the csv file are <code>,</code> or <code>\t</code>. Example of the csv file is showed below.
         <li> PersonID and Fullname <code>.csv</code> file which has two columns contain <code>PersonID, FullName</code> as shown in example below.
         <li> Reviewers Abstract <code>.csv</code> which has two columns: <code>PersonID, Abstract</code>.
     </p>
@@ -129,11 +153,19 @@
             <p>Please enable JavaScript to use file uploader.</p>
         </noscript>    
     </div>
+    <h3>Conflict of Interest/COI (optional)</h3>
+    <div id="file-uploader4" class="qq-upload-list">
+        <noscript>
+            <p>Please enable JavaScript to use file uploader.</p>
+        </noscript>
+    </div>
     </tr>
     </p>
 
     <p>
-    <a class="btn btn-primary btn-lg" href="" role="button"> <i class="fa fa-play"></i>  Start Matching</a> <br>
+    <center>
+    <a class="btn btn-primary btn-lg" href="constraint" role="button"> <i class="fa fa-play"></i> Select Constraint</a> <br>
+    </center>
     </p>
 
 
