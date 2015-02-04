@@ -3,6 +3,7 @@ from review_assign import views
 
 urlpatterns = patterns('',
     url(r'^$', views.index, name='index'),
-    url(r'^constraint$', views.step2, name='result'),
+    url(r'^constraint$', views.step2, name='constraint'),
+    url(r'^result$', views.result, name='result'),
     url(r'^ajax-upload$', views.import_uploader, name="my_ajax_upload"),
 )
