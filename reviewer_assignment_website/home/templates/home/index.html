@@ -1,71 +1,30 @@
-<!DOCTYPE html>
-{% load staticfiles %}
+{% extends "base.html" %}
+{% block content %}
+<div class="col-md-12">
+    <h2><b>Automatic Reviewer Assignment</b></h2>
+</div>
 
-<html>
-<head>
-    <title>Reviewer Assignment</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'home/bootstrap.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'home/style.css' %}" />
-    <link rel="stylesheet" href="{% static 'home/font-awesome/css/font-awesome.min.css' %}">
-</head>
-
-<body>
+<div class="col-md-12">
+  <h3>About</h3>
+    <p>Website for automatic reviewer assignment. We apply text based analysis to match submitted articles to reviewers.</p>
     
-    <div class="container">
-        <div class="pagetab"> <!-- tabs go here -->
-            <li><a href="./">Home</a></li>
-            <li><a href="assignment">Start Assignment</a></li>
-            <li><a href="./">Documentation</a></li>
-        </div>
+    <p>
+        Click button below to start the automatic reviewer assignment!
+    </p>
+</div>
 
-    <div class="col-md-12">
-        <h2><b>Automatic Reviewer Assignment</b></h2>
-    </div>
+<div class="col-md-12 submit-button">
+<center>
+    <p>
+        <a class="btn btn-primary btn-lg" href="assignment" role="button">Start Assignment</a> <br>
+    </p>
+</center>
+    <p> <a href="#">Do you have the reviewers' scores and want to estimate the score of each article?<br></a> </p>
+</div>
+
+<div class="col-md-12">
+<h3>Usage</h3>
+    <p>Click the button above to start the process. You can submit the <code>.csv</code> files that contain the following information.</p>
+</div>
     
-    <div class="col-md-12">
-        <h3>About</h3>
-        <p>
-            Website for automatic reviewer assignment. We apply text based analysis to match submitted articles to reviewers. 
-        </p>
-        
-        <p>
-            Click button below to start the automatic reviewer assignment!
-        </p>
-    </div>
-
-    <div class="col-md-12 submit-button">
-    <center>
-        <p>
-            <a class="btn btn-primary btn-lg" href="assignment" role="button">Start Assignment</a> <br>
-        </p>
-    </center>
-        <p> <a href="#">Do you have the reviewers' scores and want to estimate the score of each article?<br></a> </p>
-    </div>
-
-    <div class="col-md-12">
-        <h3>Usage</h3>
-        <p>
-            Click the button above to start the process. You can submit the <code>.csv</code> files that contain the following information. 
-        </p>
-        
-        <p>
-            Our software is publicly available on Github at : https://github.com/daniel-acuna/reviewer_assignment
-        </p>
-    </div>
-    
-    <div class="col-md-12">
-        <h3>Contact Us</h3>
-        <p>
-            <i class="fa fa-user"></i> <b>Members</b> Daniel Acuna, Titipat Achakulvisut, Tulakan Ruangrong, Konrad Kording<br>
-            <i class="fa fa-location-arrow"></i> <b>Location</b> Kording Lab, 345 E Superior St RM 1479<br>
-            Rehabilitation Institute of Chicago<br>
-            Northwestern University<br>
-            <i class="fa fa-twitter"></i> <b>Tweeter</b> <a https://twitter.com/KordingLab>@KordingLab</a> <br>
-            <i class="fa fa-university"></i> <b>Lab website</b> <a http://klab.smpp.northwestern.edu/wiki/index.php5/Main_Page>Bayesian Behavior Lab</a> <br>
-            <i class="fa fa-github-alt"></i> <b>Github</b>  <a https://github.com/daniel-acuna/reviewer_assignment>daniel-acuna/reviewer_assignment</a> <br>
-        </p>
-    </div>
-</body>
-
-
-</html>
+{% endblock %}

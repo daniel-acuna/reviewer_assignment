@@ -99,3 +99,6 @@ Temporary Items
 ## Directory-based project format:
 .idea/
 
+## Upload Media
+reviewer_assignment_website/media/tmp
+
