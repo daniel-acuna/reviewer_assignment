@@ -1,0 +1,29 @@
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html>
+  <head>
+      {% load staticfiles %}
+      <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+      <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+        <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
+
+        <link rel="stylesheet" type="text/css" href="{% static 'home/style.css' %}" />
+        <link rel="stylesheet" href="{% static 'home/font-awesome/css/font-awesome.min.css' %}">
+  </head>
+  <body>
+    <div class="container">
+        <div class="pagetab"> <!-- tabs go here -->
+            <li><a href="../">Home</a></li>
+            <li><a href="./">Start Assignment</a></li>
+            <li><a href="./">Documentation</a></li>
+        </div>
+
+    <div class="col-md-12">
+        <h2><b>Reviewer Assignment uploader</b></h2>
+    </div>
+    <div class="col-md-12">
+        {% crispy form %}
+    </div>
+    </div>
+  </body>
+</html>

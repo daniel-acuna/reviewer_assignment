@@ -41,8 +41,12 @@ INSTALLED_APPS = (
     'home',
     'review_assign',
     'review_scoring',
-    'ajaxuploader'
+    'ajaxuploader',
+    'crispy_forms',
+    'django_tables2',
 )
+
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -74,6 +78,9 @@ TEMPLATES = [
         },
     },
 ]
+
+TEMPLATE_CONTEXT_PROCESSORS = ['django.contrib.auth.context_processors.auth',
+                               'django.core.context_processors.request']
 
 WSGI_APPLICATION = 'reviewer_assignment_website.wsgi.application'
 
