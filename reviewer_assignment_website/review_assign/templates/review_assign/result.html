@@ -1,35 +1,12 @@
-<!DOCTYPE html>
-{% load staticfiles %}
+{% extends "base.html" %}
 {% load django_tables2 %}
-<link rel="stylesheet" type="text/css" href="{% static 'home/bootstrap.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'home/style.css' %}" />
-<link rel="stylesheet" href="{% static 'home/font-awesome/css/font-awesome.min.css' %}">
 
-<html>
-<head>
-    <title>Reviewer Assignment</title>
-</head>
-
-<body>
-    
-    <div class="container">
-        <!-- <ul class="nav nav-tabs">
-            <li role="presentation" class="active"><a href="#">Main</a></li>
-            <li role="presentation"><a href="#">Submit Assignment</a></li>
-            <li role="presentation"><a href="#">Documentation</a></li>
-        </ul> -->
-        <div class="pagetab"> <!-- tabs go here -->
-            <li><a href="./">Home</a></li>
-            <li><a href="assignment">Start Assignment</a></li>
-            <li><a href="./">Documentation</a></li>
-        </div>
-    <div class="col-md-12">
-    <h2><b>Matching Result</b></h2>
-    <p>Result are shown below. You can download <code>.csv</code> file here. If you are not satisfied the result,
-        you can add conflict of interest (COI) file or rerun the assignment.</p>
-    <h3>Authors and reviewer's information</h2>
-    {% render_table people %}
-    </div>
-    </div>
-
-</body>
+{% block content %}
+<div class="col-md-12">
+<h2><b>Matching Result</b></h2>
+    <p>Result are shown below. You can download <code>.csv</code> file here. If you are not satisfied the result, you can add conflict of interest (COI) file or rerun the assignment.
+    </p>
+<h3>Authors and reviewer's information</h3>
+{% render_table people %}
+</div>
+{% endblock %}
