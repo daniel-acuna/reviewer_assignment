@@ -15,7 +15,7 @@ def validate_file_extension(value):
 class SubmitAssingmentInformation(forms.Form):
     #paper_information = forms.FileInput(label='paper_information', required=True)
     people = forms.FileField(required=True, validators=[validate_file_extension])
-    article_information = forms.FileField(required=False, validators=[validate_file_extension])
+    article_information = forms.FileField(required=True, validators=[validate_file_extension])
     reviewers = forms.FileField(required=False, validators=[validate_file_extension])
     coi = forms.FileField(required=False, validators=[validate_file_extension])
     minimum_reviews_per_article = forms.IntegerField(min_value=0, required=True)
@@ -99,6 +99,8 @@ class SubmitAssingmentInformation(forms.Form):
                     Div('article_information', title='Information about articles'),
                     HTML('''
                     Reviewers Abstract <code>.csv</code> which has two columns: <code>PersonID, Abstract</code>.
+                    You do not always need to specify this file if all reviewers are authors of articles.
+                    We will use the articles' abstracts for topic modeling.
                     '''),
                     Div('reviewers', title='Information about reviewers')
                 ),
