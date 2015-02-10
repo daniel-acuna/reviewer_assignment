@@ -218,9 +218,10 @@ hr {
 }
 
 footer {
-  width:270px;
+  width:100%;
+  bottom:0;
   float:left;
-  position:fixed;
+  position:absolute;
   bottom:50px;
 }
 
