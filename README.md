@@ -17,7 +17,8 @@ Website that implements the reviewer-article assignment system.
   - [Scikit-learn](http://scikit-learn.org/stable/)
   - [Django Crispy Forms](http://django-crispy-forms.readthedocs.org/en/latest/)
   - [Django Tables 2](https://django-tables2.readthedocs.org/en/latest/)
-  - [Gurobi](http://www.gurobi.com/)
+  - [GLPK](http://en.wikibooks.org/wiki/GLPK/Linux_packages)
+  - [PuLP](https://code.google.com/p/pulp-or/)
 
 # Installation
 
