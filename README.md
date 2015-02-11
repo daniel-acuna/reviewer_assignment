@@ -5,10 +5,10 @@ Website that implements the reviewer-article assignment system.
 **This is work-in-progress. Please use at your own risk*
 
 # Members
-- [Daniel Acuna](https://github.com/daniel-acuna) (concept, website, paper writing)
-- [Titipat Achakulvisut](https://github.com/titipata) (website, paper writing)
-- [Tulakan Ruangrong](https://github.com/tupleblog) (website)
-- [Konrad Kording](http://klab.smpp.northwestern.edu/wiki/index.php5/Welcome) (concept, paper writing)
+  - [Daniel Acuna](https://github.com/daniel-acuna) (concept, website, paper writing)
+  - [Titipat Achakulvisut](https://github.com/titipata) (website, paper writing)
+  - [Tulakan Ruangrong](https://github.com/tupleblog) (website)
+  - [Konrad Kording](http://klab.smpp.northwestern.edu/wiki/index.php5/Welcome) (concept, paper writing)
 
 # Requirements
   - [Django 1.7.4](https://www.djangoproject.com/)
@@ -17,12 +17,11 @@ Website that implements the reviewer-article assignment system.
   - [Scikit-learn](http://scikit-learn.org/stable/)
   - [Django Crispy Forms](http://django-crispy-forms.readthedocs.org/en/latest/)
   - [Django Tables 2](https://django-tables2.readthedocs.org/en/latest/)
-  - [GLPK](http://en.wikibooks.org/wiki/GLPK/Linux_packages)
-  - [PuLP](https://code.google.com/p/pulp-or/)
+  - [Glop (Google's linear programming system)](https://developers.google.com/optimization/lp/glop)
 
 # Installation
 
-Installation instructions soon.
+Installation instructions soon (will be added to documentation page).
 
 # License
 
