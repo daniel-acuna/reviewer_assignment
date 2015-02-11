@@ -41,8 +41,15 @@ def linprog_solve(f, A, b):
 
     result_status = solver.Solve()
     if result_status != 0:
-        "The final solution might not converged"
+        print "The final solution might not converged"
 
-    x_sol = [x_tmp.SolutionValue() for x_tmp in x]
+    x_sol = np.array([x_tmp.SolutionValue() for x_tmp in x])
 
     return x_sol
+
+
+if __name__ == '__main__':
+    f = np.array([10, 6, 4])
+    A = np.array([[1,1,1], [10,4,5], [2,2,6]])
+    C = np.array([100, 600, 300])
+    x_sol = linprog_solve(f, A, C)
