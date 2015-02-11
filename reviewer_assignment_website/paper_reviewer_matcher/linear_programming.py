@@ -65,7 +65,7 @@ def test_example():
     C = np.array([1500, 1000, 0, 0])
     x_sol = linprog_solve(f, coo_matrix(A), C)
     print 'Example Problem:'
-    print 'maximize_x\t 50x + 40y' 
+    print 'maximize_x\t 50x + 40y'
     print 's.t.\t\t 2x+3y <= 1500, 2x + y <= 1000, x >= 0, y >= 0'
     print 'Solution: (x, y) = ', x_sol
 

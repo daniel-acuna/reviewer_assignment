@@ -5,5 +5,4 @@ __author__ = 'Daniel Acuna'
 
 from problem_formulation import *
 from affinity_computation import *
-
-
+from linear_programming import *
