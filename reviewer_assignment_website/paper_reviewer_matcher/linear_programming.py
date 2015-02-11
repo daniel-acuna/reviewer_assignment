@@ -6,11 +6,11 @@ from ortools.linear_solver import pywraplp
 def linprog_solve(f, A, b):
     '''
     Solve the following linear programming problem
-            minimize_x (f.T).dot(x)
+            maximize_x (f.T).dot(x)
             subject to A.dot(x) <= b
-    where   A is sparse matrix
-            f is vector of cost function associated with variable
-            b is constraints
+    where   A is a sparse matrix (coo_matrix)
+            f is column vector of cost function associated with variable
+            b is column vector
     '''
 
     # flatten the variable
@@ -18,7 +18,7 @@ def linprog_solve(f, A, b):
     b = b.flatten()
 
     solver = pywraplp.Solver('SolveReviewerAssignment',
-                     pywraplp.Solver.GLOP_LINEAR_PROGRAMMING)
+                             pywraplp.Solver.GLOP_LINEAR_PROGRAMMING)
 
     infinity = solver.Infinity()
     n, m = A.shape
@@ -49,9 +49,26 @@ def linprog_solve(f, A, b):
     return x_sol
 
 
-if __name__ == '__main__':
-    f = np.array([10, 6, 4])
-    A = np.array([[1,1,1], [10,4,5], [2,2,6]])
-    C = np.array([100, 600, 300])
+def test_example():
+    # Solves example problem from http://www.vitutor.com/alg/linear_programming/example_programming.html
+    # f(x,y)= 50x + 40y
+    f = np.array([50, 40], dtype = np.float)
+
+    # 2x+3y <= 1500
+    # 2x + y <= 1000
+    # x >= 0 -> -x <= 0
+    # y >= 0 -> -y <= 0
+    A = np.array([[ 2, 3],
+                  [ 2, 1],
+                  [-1, 0],
+                  [ 0, -1]], dtype = np.float)
+    C = np.array([1500, 1000, 0, 0])
     x_sol = linprog_solve(f, coo_matrix(A), C)
-    print 'Solution (note that example is not converged) = ', x_sol
+    print 'Example Problem:'
+    print 'maximize_x\t 50x + 40y' 
+    print 's.t.\t\t 2x+3y <= 1500, 2x + y <= 1000, x >= 0, y >= 0'
+    print 'Solution: (x, y) = ', x_sol
+
+
+if __name__ == '__main__':
+    test_example()
