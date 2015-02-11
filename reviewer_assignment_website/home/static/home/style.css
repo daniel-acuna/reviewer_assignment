@@ -1,7 +1,6 @@
 @import url(https://fonts.googleapis.com/css?family=Lato:300italic,700italic,300,700);
 
 body {
-  padding:50px;
   font:14px/1.5 Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
   color:#777;
   font-weight:300;
@@ -13,7 +12,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 p, ul, ol, table, pre, dl {
-  margin:0 0 20px;
+  margin:0 0 20px 0;
 }
 
 h1, h2, h3 {
@@ -49,12 +48,11 @@ a small {
 .pagetab {
   display: block;
   text-align: right;
-  font-size: 14px;
+  font-size: 1.2em;
   width: 100%;
   float: right;
   border-bottom: 1px solid #ddd;
   margin-bottom: 2em;
-
 }
 
 .pagetab ul {
@@ -87,6 +85,26 @@ a small {
 .wrapper {
   width:860px;
   margin:0 auto;
+}
+
+/* index page goes here */
+.content-block {
+  padding-bottom:12em;
+  padding-top:4em;
+  font-size: 1.5em;
+}
+
+.asmt_btt_grp {
+  padding:2em 0;
+}
+
+.asmt_btt {
+  font-size: 2em;
+}
+
+/* footer class goes here */
+.footer {
+  font-size: 1.2em;
 }
 
 blockquote {
@@ -218,9 +236,10 @@ hr {
 
 footer {
   width:100%;
-  float:left;
+  float:none;
   position:fixed;
   bottom:0;
+  padding-top:20px;
 }
 
 @media print, screen and (max-width: 960px) {
@@ -232,8 +251,8 @@ footer {
 
   header, section, footer {
     float:none;
-    position:static;
-    width:auto;
+    position:fixed;
+    width:100%;
   }
 
   header {
@@ -243,8 +262,8 @@ footer {
   section {
     border:1px solid #e5e5e5;
     border-width:1px 0;
-    padding:20px 0;
-    margin:0 0 20px;
+    /*padding:20px 0;*/
+    /*margin:0 0 20px;*/
   }
 
   header a small {
@@ -285,9 +304,9 @@ footer {
 }
 
 @media print, screen and (max-width: 480px) {
-  body {
+  /*body {
     padding:15px;
-  }
+  }*/
 
   header ul {
     display:none;
