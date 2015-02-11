@@ -1,4 +1,5 @@
 import numpy as np
+from scipy.sparse import coo_matrix
 from ortools.linear_solver import pywraplp
 
 
@@ -52,4 +53,5 @@ if __name__ == '__main__':
     f = np.array([10, 6, 4])
     A = np.array([[1,1,1], [10,4,5], [2,2,6]])
     C = np.array([100, 600, 300])
-    x_sol = linprog_solve(f, A, C)
+    x_sol = linprog_solve(f, coo_matrix(A), C)
+    print 'Solution (note that example is not converged) = ', x_sol
