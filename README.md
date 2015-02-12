@@ -15,9 +15,12 @@ Website that implements the reviewer-article assignment system.
   - [Pandas](http://pandas.pydata.org/)
   - [Numpy](http://www.numpy.org/)
   - [Scikit-learn](http://scikit-learn.org/stable/)
+  - [gensim](https://radimrehurek.com/gensim/)
+  - [unidecode](https://pypi.python.org/pypi/Unidecode)
   - [Django Crispy Forms](http://django-crispy-forms.readthedocs.org/en/latest/)
   - [Django Tables 2](https://django-tables2.readthedocs.org/en/latest/)
   - [Glop (Google's linear programming system)](https://developers.google.com/optimization/lp/glop)
+  
 
 # Installation
 
