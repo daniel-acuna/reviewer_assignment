@@ -16,7 +16,7 @@ from django.core.files.base import ContentFile
 from django.conf import settings
 import uuid
 
-# import paper_reviewer_matcher as prm
+import paper_reviewer_matcher as prm
 import numpy as np
 
 def get_file_path(filename):

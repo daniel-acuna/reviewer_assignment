@@ -81,40 +81,40 @@ class SubmitAssingmentInformation(forms.Form):
         self.helper.layout = Layout(
             TabHolder(
                 Tab('Authors and reviewers',
-                        HTML('''
-                        PersonID and Fullname <code>.csv</code> file which has two columns contain <code>PersonID, FullName</code>
-                        as shown in example below.
-                        This file will be used to match <code>PersonID</code> with their full name in other files.
-                        '''),
-                        Div('people', title='List of people involved in the review process')
+                    HTML('''<div style="padding-bottom:30px;">
+                    PersonID and Fullname <code>.csv</code> file which has two columns contain <code>PersonID, FullName</code>
+                    as shown in example below.
+                    This file will be used to match <code>PersonID</code> with their full name in other files.
+                    </div>'''),
+                    Div('people', title='List of people involved in the review process', css_class="col-xs-offset-4 col-md-offset-4 col-lg-offset-4")
                     )
                 ,
                 Tab('Articles and reviewers',
-                    HTML('''
+                    HTML('''<div style="padding-bottom:30px;">
                     Papers information <code>.csv</code> file where columns contain
                     <code>PaperID, Title, Abstract, PersonID list</code>.
                     Recommended delimiter for the csv file are <code>,</code> or <code>\t</code>.
                     Example of the csv file is showed below.
-                    '''),
+                    </div>'''),
                     Div('article_information', title='Information about articles'),
-                    HTML('''
+                    HTML('''<div style="padding:30px 0;">
                     Reviewers Abstract <code>.csv</code> which has two columns: <code>PersonID, Abstract</code>.
                     You do not always need to specify this file if all reviewers are authors of articles.
                     We will use the articles' abstracts for topic modeling.
-                    '''),
+                    </div>'''),
                     Div('reviewers', title='Information about reviewers')
                 ),
                 Tab('Conflict of interests',
-                    HTML('''
+                    HTML('''<div style="padding-bottom:30px;">
                     Pairs of <code>PaperID</code> and <code>PersonID</code> indicating which articles cannot be reviewed
                     by person ID. The system will automatically set co-authors as having conflict of interests.
-                    '''),
-                    Div('coi', title='Conflict of interests', label='Conflicts of interests')
+                    </div>'''),
+                    Div('coi', title='Conflict of interests', label='Conflicts of interests', css_class="col-xs-offset-4 col-md-offset-4 col-lg-offset-4")
                 ),
                 Tab('Constraints',
-                    HTML('''
+                    HTML('''<div style="padding-bottom:30px;">
                     Set the limits of reviews per article and articles per reviewer
-                    '''),
+                    </div>'''),
                     Div('minimum_reviews_per_article'),
                     Div('maximum_reviews_per_article'),
                     Div('minimum_articles_per_reviewer'),
@@ -122,7 +122,7 @@ class SubmitAssingmentInformation(forms.Form):
                 ),
             ),
             ButtonHolder(
-                Submit('Make assignment', 'Make assignment')
+                Submit('Make assignment', 'Make Assignment', css_class="col-xs-8 col-xs-offset-2 col-md-4 col-md-offset-4 col-lg-4 col-lg-offset-4", style="font-size:22px; margin-bottom:40px;")
             )
         )
 
