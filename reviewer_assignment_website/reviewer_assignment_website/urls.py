@@ -3,6 +3,7 @@ from django.contrib import admin
 
 urlpatterns = patterns('',
     url(r'^assignment/', include('review_assign.urls')),
+    url(r'^scoring/', include('review_scoring.urls')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^', include('home.urls')),
 )

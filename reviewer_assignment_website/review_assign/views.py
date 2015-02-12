@@ -19,6 +19,10 @@ import uuid
 import paper_reviewer_matcher as prm
 import numpy as np
 
+def docs(request):
+    return render_to_response('review_assign/docs_review_assign.html')
+
+
 def get_file_path(filename):
     ext = filename.split('.')[-1]
     filename = "%s.%s" % (uuid.uuid4(), ext)
