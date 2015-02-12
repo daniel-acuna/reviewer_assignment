@@ -2,7 +2,6 @@ from django.middleware.csrf import get_token
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
-from ajaxuploader.views import AjaxFileUploader
 from review_assign.forms import SubmitAssingmentInformation
 from django.views.generic import FormView
 from django.http import HttpResponseRedirect
@@ -18,7 +17,7 @@ from django.conf import settings
 import uuid
 
 import paper_reviewer_matcher as prm
-
+import numpy as np
 
 def get_file_path(filename):
     ext = filename.split('.')[-1]
@@ -86,15 +85,6 @@ class AssignmentTable(tables.Table):
 
 def result(request, people_fn=None, article_info_fn=None, reviewers_fn=None, coi_fn=None,
            min_rev_art=None, max_rev_art=None, min_art_rev=None, max_art_rev=None):
-
-    print people_fn
-    print article_info_fn
-    print reviewers_fn
-    print coi_fn
-    print min_rev_art
-    print max_rev_art
-    print min_art_rev
-    print max_art_rev
     min_rev_art = int(min_rev_art)
     max_rev_art = int(max_rev_art)
     min_art_rev = int(min_art_rev)
@@ -128,14 +118,12 @@ def result(request, people_fn=None, article_info_fn=None, reviewers_fn=None, coi
 
     assignment_df = article_data[['PaperID', 'Title']]
     assignment_df['Reviewers'] = ''
-
     for i in range(b.shape[0]):
-        pass
+        paper_reviewers = np.where(b[i, :])[0]
+        assignment_df.Reviewers.iloc[i] = ', '.join(list(people_data.FullName.iloc[paper_reviewers].copy()))
 
-    people_table = PeopleTable(people_data.to_dict('records'))
-    return render_to_response('review_assign/result.html', {"people": people_table},
+    reviewer_assignments_table = AssignmentTable(assignment_df.to_dict('records'))
+    return render_to_response('review_assign/result.html', {"reviewer_assignments": reviewer_assignments_table},
                               context_instance=RequestContext(request))
 
 
-
-import_uploader = AjaxFileUploader()
