@@ -11,6 +11,7 @@
   </head>
   <body>
 
+    <div class="wrapper">
       <div class="pagetab"> <!-- tabs go here -->
         <div class="container">
           <li><a href="{% url 'home.views.index' %}">Home</a></li>
@@ -23,24 +24,24 @@
       {% block content %} {% endblock %}.
       </div>
 
+      <div class="pusher"></div>
+    </div>
+
+
+
+    <footer class="footer text-center">
+      <div class="container">
+        <p style="margin:0;">
+        <i class="fa fa-user"></i> <b>Members</b> Daniel Acuna, Titipat Achakulvisut, Tulakan Ruangrong, Konrad Kording<br>
+        <i class="fa fa-location-arrow"></i> <b>Location</b> Kording Lab, 345 E Superior St RM 1479<br>
+        Rehabilitation Institute of Chicago<br>
+        Northwestern University<br>
+        <i class="fa fa-twitter"></i> <b>Twitter</b> <a href="https://twitter.com/KordingLab">@KordingLab</a> <br>
+        <i class="fa fa-university"></i> <b>Lab Website</b> <a href="http://klab.smpp.northwestern.edu/wiki/index.php5/Main_Page">Bayesian Behavior Lab</a> <br>
+        <i class="fa fa-github-alt"></i> <b>Github</b>  <a href="https://github.com/daniel-acuna/reviewer_assignment">daniel-acuna/reviewer_assignment</a> <br>
+        </p>
+      </div>
+    </footer>
 
   </body>
-
-  <footer class="footer text-center" style="background-color:#EEE;">
-    <div class="container">
-      <p>
-      <i class="fa fa-user"></i> <b>Members</b> Daniel Acuna, Titipat Achakulvisut, Tulakan Ruangrong, Konrad Kording<br>
-      <i class="fa fa-location-arrow"></i> <b>Location</b> Kording Lab, 345 E Superior St RM 1479<br>
-      Rehabilitation Institute of Chicago<br>
-      Northwestern University<br>
-      <i class="fa fa-twitter"></i> <b>Twitter</b> <a href="https://twitter.com/KordingLab">@KordingLab</a> <br>
-      <i class="fa fa-university"></i> <b>Lab website</b> <a href="http://klab.smpp.northwestern.edu/wiki/index.php5/Main_Page">Bayesian Behavior Lab</a> <br>
-      <i class="fa fa-github-alt"></i> <b>Github</b>  <a href="https://github.com/daniel-acuna/reviewer_assignment">daniel-acuna/reviewer_assignment</a> <br>
-      </p>
-    </div>
-  </footer>
-
-
-
-
 </html>

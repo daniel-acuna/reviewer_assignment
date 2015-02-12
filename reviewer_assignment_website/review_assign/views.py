@@ -16,7 +16,7 @@ from django.core.files.base import ContentFile
 from django.conf import settings
 import uuid
 
-import paper_reviewer_matcher as prm
+# import paper_reviewer_matcher as prm
 import numpy as np
 
 def get_file_path(filename):
@@ -125,5 +125,3 @@ def result(request, people_fn=None, article_info_fn=None, reviewers_fn=None, coi
     reviewer_assignments_table = AssignmentTable(assignment_df.to_dict('records'))
     return render_to_response('review_assign/result.html', {"reviewer_assignments": reviewer_assignments_table},
                               context_instance=RequestContext(request))
-
-

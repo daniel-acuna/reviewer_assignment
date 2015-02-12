@@ -1,4 +1,7 @@
 @import url(https://fonts.googleapis.com/css?family=Lato:300italic,700italic,300,700);
+html, body {
+  height: 100%;
+}
 
 body {
   font:14px/1.5 Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -48,7 +51,7 @@ a small {
 .pagetab {
   display: block;
   text-align: right;
-  font-size: 1.2em;
+  /*font-size: 1.2em;*/
   width: 100%;
   float: right;
   border-bottom: 1px solid #ddd;
@@ -83,15 +86,17 @@ a small {
 }
 
 .wrapper {
-  width:860px;
-  margin:0 auto;
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  margin: 0 auto -132px;
 }
 
 /* index page goes here */
 .content-block {
-  padding-bottom:12em;
-  padding-top:4em;
-  font-size: 1.5em;
+  /*padding-bottom:12em;
+  padding-top:4em;*/
+  /*font-size: 1.5em;*/
 }
 
 .asmt_btt_grp {
@@ -99,12 +104,31 @@ a small {
 }
 
 .asmt_btt {
-  font-size: 2em;
+  font-size: 22px;
+}
+
+#asmt_ps {
+  font-size: 11px;
 }
 
 /* footer class goes here */
 .footer {
-  font-size: 1.2em;
+  font-size: 0.8em;
+  height:132px; /*footer exact height is 112 this plus top and bottom space 10 each*/
+  width:100%;
+  /*float:none;
+  position:absolute;
+  bottom:0;
+  left:0;*/
+  background-color:#EEE;
+}
+
+.footer .container {
+  padding-top:12px;
+}
+
+.pusher {
+  height: 132px;
 }
 
 blockquote {
@@ -233,25 +257,20 @@ hr {
   height:1px;
   margin:0 0 20px;
 }
-
+/*
 footer {
-  width:100%;
-  float:none;
-  position:fixed;
-  bottom:0;
-  padding-top:20px;
-}
+
+}*/
 
 @media print, screen and (max-width: 960px) {
 
   div.wrapper {
     width:auto;
-    margin:0;
   }
 
   header, section, footer {
-    float:none;
-    position:fixed;
+    /*float:none;
+    position:fixed;*/
     width:100%;
   }
 
@@ -303,7 +322,7 @@ footer {
   }
 }
 
-@media print, screen and (max-width: 480px) {
+@media print, screen and (max-width: 447px) {
   /*body {
     padding:15px;
   }*/
@@ -314,6 +333,9 @@ footer {
   div.pagetab {
     width: 100%;
     float: center;
+  }
+  .footer .container {
+    padding-top:2px;
   }
 }
 
