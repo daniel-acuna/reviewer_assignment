@@ -1,6 +1,9 @@
 import numpy as np
 from scipy.sparse import coo_matrix
-from ortools.linear_solver import pywraplp
+try:
+    from ortools.linear_solver import pywraplp
+except ImportError:
+    print "or-tools does not seem to be installed. Skipping for now"
 
 
 def linprog_solve(f, A, b):
