@@ -18,10 +18,10 @@ class SubmitAssingmentInformation(forms.Form):
     article_information = forms.FileField(required=True, validators=[validate_file_extension])
     reviewers = forms.FileField(required=False, validators=[validate_file_extension])
     coi = forms.FileField(required=False, validators=[validate_file_extension])
-    minimum_reviews_per_article = forms.IntegerField(min_value=0, required=True)
-    maximum_reviews_per_article = forms.IntegerField(min_value=0, required=True)
-    minimum_articles_per_reviewer = forms.IntegerField(min_value=0, required=True)
-    maximum_articles_per_reviewer = forms.IntegerField(min_value=0, required=True)
+    minimum_reviews_per_article = forms.IntegerField(initial=3, min_value=0, required=True)
+    maximum_reviews_per_article = forms.IntegerField(initial=3, min_value=0, required=True)
+    minimum_articles_per_reviewer = forms.IntegerField(initial=1, min_value=0, required=True)
+    maximum_articles_per_reviewer = forms.IntegerField(initial=20, min_value=0, required=True)
 
     def __init__(self, *args, **kwargs):
         super(SubmitAssingmentInformation, self).__init__(*args, **kwargs)
