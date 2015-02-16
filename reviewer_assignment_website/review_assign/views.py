@@ -4,7 +4,7 @@ from django.template import RequestContext
 
 from review_assign.forms import SubmitAssingmentInformation
 from django.views.generic import FormView
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.core.files.base import ContentFile
 import django_tables2 as tables
 from django.core.urlresolvers import reverse
@@ -64,7 +64,7 @@ class index(FormView):
             max_art_rev = request.POST['maximum_articles_per_reviewer']
             print request.FILES
             print request.POST
-            return HttpResponseRedirect(reverse('result', args=(),
+            return HttpResponseRedirect(reverse('create_assignment', args=(),
                                                 kwargs={'people_fn': people_fn,
                                                         'article_info_fn': article_info_fn,
                                                         'reviewers_fn': reviewers_fn,
@@ -87,8 +87,8 @@ class AssignmentTable(tables.Table):
     Title = tables.Column()
     Reviewers = tables.Column()
 
-def result(request, people_fn=None, article_info_fn=None, reviewers_fn=None, coi_fn=None,
-           min_rev_art=None, max_rev_art=None, min_art_rev=None, max_art_rev=None):
+def create_assignment(request, people_fn=None, article_info_fn=None, reviewers_fn=None, coi_fn=None,
+                      min_rev_art=None, max_rev_art=None, min_art_rev=None, max_art_rev=None):
     min_rev_art = int(min_rev_art)
     max_rev_art = int(max_rev_art)
     min_art_rev = int(min_art_rev)
@@ -109,8 +109,8 @@ def result(request, people_fn=None, article_info_fn=None, reviewers_fn=None, coi
         coi_data = pd.DataFrame.from_csv(coi_path, index_col=None)
 
     # compute assignments
-    a = prm.compute_affinity(reviewers_data.Abstract.iloc[0:10],
-                             article_data.Abstract.iloc[0:10])
+    a = prm.compute_affinity(reviewers_data.Abstract,
+                             article_data.Abstract)
     #
     v, ne, d = prm.create_lp_matrices(a, min_rev_art, max_rev_art,
                                       min_art_rev, max_art_rev)
@@ -122,10 +122,42 @@ def result(request, people_fn=None, article_info_fn=None, reviewers_fn=None, coi
 
     assignment_df = article_data[['PaperID', 'Title']]
     assignment_df['Reviewers'] = ''
+    assignment_df['ReviewerIDs'] = ''
     for i in range(b.shape[0]):
         paper_reviewers = np.where(b[i, :])[0]
         assignment_df.Reviewers.iloc[i] = ', '.join(list(people_data.FullName.iloc[paper_reviewers].copy()))
+        # assignment_df.ReviewerIDs.iloc[i] = ', '.join(list(people_data.PersonID.iloc[paper_reviewers].copy()))
 
+    # result filename
+    result_fn = str(uuid.uuid4()) + '.csv'
+    default_storage.save(os.path.join('tmp', result_fn),
+                         ContentFile(assignment_df.to_csv(None, na_rep='', index=False)))
+
+    return HttpResponseRedirect(reverse('result', args=(), kwargs={'result_fn': result_fn}))
+
+
+def result(request, result_fn=None):
+    # save CSV file
+    assignment_df = pd.read_csv(os.path.join(settings.MEDIA_ROOT, os.path.join('tmp', result_fn)))
+    assignment_df = assignment_df.fillna('')
     reviewer_assignments_table = AssignmentTable(assignment_df.to_dict('records'))
-    return render_to_response('review_assign/result.html', {"reviewer_assignments": reviewer_assignments_table},
+    return render_to_response('review_assign/result.html',
+                              {"reviewer_assignments": reviewer_assignments_table,
+                               "result_fn": result_fn},
                               context_instance=RequestContext(request))
+
+def download_result(_, result_fn=None):
+    import os
+    from django.core.servers.basehttp import FileWrapper
+    from django.conf import settings
+    import mimetypes
+
+    filename = os.path.join(settings.MEDIA_ROOT, os.path.join('tmp', result_fn))
+    download_name = result_fn
+    wrapper = FileWrapper(open(filename))
+    content_type = mimetypes.guess_type(filename)[0]
+    response = HttpResponse(wrapper, content_type=content_type)
+    response['Content-Length'] = os.path.getsize(filename)
+    response['Content-Disposition'] = "attachment; filename=%s" % download_name
+    return response
+

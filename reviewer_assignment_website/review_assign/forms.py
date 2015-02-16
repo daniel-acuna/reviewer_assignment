@@ -32,50 +32,6 @@ class SubmitAssingmentInformation(forms.Form):
         self.helper.field_class = 'col-lg-8'
         self.helper.form_method = 'post'
         self.helper.form_action = ''
-        # self.helper.layout = Layout(
-        #     Fieldset('List of people involved in the process (authors and reviewers)',
-        #         HTML('''
-        #         PersonID and Fullname <code>.csv</code> file which has two columns contain <code>PersonID, FullName</code>
-        #         as shown in example below.
-        #         This file will be used to match <code>PersonID</code> with their full name in other files.
-        #         '''),
-        #         Div('people', title='List of people involved in the review process')
-        #     ),
-        #     Fieldset('Articles and reviewers',
-        #         HTML('''
-        #         Papers information <code>.csv</code> file where columns contain
-        #         <code>PaperID, Title, Abstract, PersonID list</code>.
-        #         Recommended delimiter for the csv file are <code>,</code> or <code>\t</code>.
-        #         Example of the csv file is showed below.
-        #         '''),
-        #         Div('article_information', title='Information about articles'),
-        #         HTML('''
-        #         Reviewers Abstract <code>.csv</code> which has two columns: <code>PersonID, Abstract</code>.
-        #         '''),
-        #         Div('reviewers', title='Information about reviewers'),
-        #     ),
-        #     Fieldset('Conflict of interests',
-        #         HTML('''
-        #         Pairs of <code>PaperID</code> and <code>PersonID</code> indicating which articles cannot be reviewed
-        #         by person ID. The system will automatically set co-authors as having conflict of interests.
-        #         '''),
-        #         Div('coi', title='Conflict of interests', label='Conflicts of interests')
-        #     ),
-        #     Fieldset('Constraints',
-        #         HTML('''
-        #         Set the limits of reviews per article and articles per reviewer
-        #         '''),
-        #         Div('minimum_reviews_per_article'),
-        #         Div('maximum_reviews_per_article'),
-        #         Div('minimum_articles_per_reviewer'),
-        #         Div('maximum_articles_per_reviewer')
-        #
-        #     ),
-        #     ButtonHolder(
-        #         Submit('Make assignment', 'Make assignment')
-        #     )
-        #
-        # )
 
         # With tabs
         self.helper.layout = Layout(
@@ -86,7 +42,8 @@ class SubmitAssingmentInformation(forms.Form):
                     as shown in example below.
                     This file will be used to match <code>PersonID</code> with their full name in other files.
                     </div>'''),
-                    Div('people', title='List of people involved in the review process', css_class="col-xs-offset-4 col-md-offset-4 col-lg-offset-4")
+                    Div('people', title='List of people involved in the review process',
+                        css_class="col-xs-offset-4 col-md-offset-4 col-lg-offset-4")
                     )
                 ,
                 Tab('Articles and reviewers',
@@ -109,7 +66,9 @@ class SubmitAssingmentInformation(forms.Form):
                     Pairs of <code>PaperID</code> and <code>PersonID</code> indicating which articles cannot be reviewed
                     by person ID. The system will automatically set co-authors as having conflict of interests.
                     </div>'''),
-                    Div('coi', title='Conflict of interests', label='Conflicts of interests', css_class="col-xs-offset-4 col-md-offset-4 col-lg-offset-4")
+                    Div('coi', title='Conflict of interests',
+                        label='Conflicts of interests',
+                        css_class="col-xs-offset-4 col-md-offset-4 col-lg-offset-4")
                 ),
                 Tab('Constraints',
                     HTML('''<div style="padding-bottom:30px;">
@@ -122,7 +81,9 @@ class SubmitAssingmentInformation(forms.Form):
                 ),
             ),
             ButtonHolder(
-                Submit('Make assignment', 'Make Assignment', css_class="col-xs-8 col-xs-offset-2 col-md-4 col-md-offset-4 col-lg-4 col-lg-offset-4", style="font-size:22px; margin-bottom:40px;")
+                Submit('Make assignment', 'Make Assignment',
+                       css_class="col-xs-8 col-xs-offset-2 col-md-4 col-md-offset-4 col-lg-4 col-lg-offset-4",
+                       style="font-size:22px; margin-bottom:40px;")
             )
         )
 
