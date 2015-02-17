@@ -3,203 +3,39 @@
 
 {% block content %}
 <div class="col-md-12">
-    <div id="task_progress">
-        <p class="loading">Updating user accounts in bulk</p>
-        <p class="loading progress_percentage"></p>
-        <p class="loading progress_estimate">
-            Waiting for an available bulk update worker.
-            This might take several minutes if many other people are running reports
-            or performing uploads.
-        </p>
-    </div>
 <script>
-        var djceleryConfigs = {
-            taskId: "{{task_id}}",
-            selector: '#task_progress',
-            failureCallback: function (task) {
-                $('#bulk_account_update_form').show();
-            },
-            table: {
-                success: {
-                    resultsTable: "#upload_success_results",
-                    captionCallback: function (parsedResult) {
-                        return "Bulk update completed successfully";
-                    },
-                    columns: [
-                                 ["Users Created", "created"],
-                                 ["Users Updated", "updated"]
-                    ],
-                    options: {
-                        'bFilter': false,
-                        'bInfo': false,
-                        'bLengthChange': false,
-                        'bPaginate': false,
-                        'bSort': false
-                    },
-                    callback: function () {
-                        $('#bulk_account_update_form').show();
-                    }
-                },
-                error: {
-                    resultsTable: "#csv_validation_errors",
-                    captionCallback: function (parsedResult) {
-                        var msg = "There are <strong>";
-                        msg += parsedResult.rowData.length;
-                        msg += "</strong> problem(s) with your CSV file.";
-                        return msg;
-                    },
-                    columns: [
-                                 ["Row", "row"],
-                                 ["Problem", "message"],
-                                 ["Content", "record"]
-                    ],
-                    options: {
-                        'iDisplayLength': 50
-                    },
-                    callback: function () {
-                        $('#task_progress').before(
-                              '<div class="error">' +
-                                  'Please correct these problems and try again' +
-                              '</div>'
-                        );
-                        $('#bulk_account_update_form').show();
-                    }
-                }
-            }
-        };
+/*$(document).ready(function(){
+  var last_percent = -1
+  var progresspump = setInterval(function(){
+    $.get("{% url 'celery-task_status' task_id %}", function(data){
+      //var result_progress = jQuery.parseJSON(data)
 
-        jQuery.fn.djcelery = function(options) {
-    var interval_id;
-    var el = this;
-    var url = '/task/' + options.task_id + '/status/';
-    var number_of_errors = 0;
-    if (options.task_id.length !== 36) {
-        url = '';
-    }
+      if (data.task.status == "PROGRESS") {
+        if (data.task.progress_percent != last_percent) {
+            /* update the progress bar width */
+            $("#progress").css('width',data.task.result.progress_percent+'%');
 
-    if (typeof(options.on_failure) !== 'function') {
-        options.on_failure = function(){};
-    }
-    if (typeof(options.on_error) !== 'function') {
-        options.on_error = function(){};
-    }
-    if (typeof(options.on_other) !== 'function') {
-        options.on_other = function(){};
-    }
-
-    function handle_status(data) {
-        if (data === null){
-            return;
+           /* and display the numeric value */
+           $("#progress").html('<i class="fa fa-circle-o-notch fa-spin"></i> ' + data.task.result.progress_percent + '%');
+           last_percent = data.task.progress_percent;
         }
-        var task = data.task;
-        if (task === null) {
-            return;
-        }
+      }
 
-        if (task.status == 'PENDING') {
-            return;
-        }
-
-        if (task.status == 'SUCCESS') {
-            clearInterval(interval_id);
-            options.on_success(task, el);
-        }
-        else if (task.status == 'FAILURE' ) {
-            clearInterval(interval_id);
-            options.on_failure(task, el);
-        } else {
-            options.on_other(task, el);
-        }
-    }
-
-    function handle_error() {
-        ++number_of_errors;
-        // Wait after first error, just in case there is a timing issue
-        if (number_of_errors >= 2) {
-            clearInterval(interval_id);
-            options.on_error(null, el);
-        }
-    }
-
-    function check_status() {
-        $.ajax({
-            url: url,
-            data: {},
-            success: handle_status,
-            cache: false, // append a timestamp to the end of the URL
-            dataType: 'json',
-            error: handle_error
-        });
-    }
-
-    $(document).ready(function(){
-        if (url !== '') {
-            setTimeout(check_status, 0);
-            interval_id = setInterval(check_status, options.check_interval);
-        } else {
-            number_of_errors = 3;
-            handle_error();
-        }
-    });
-};
-
-$(document).ready(function () {
-    var $progress_container = $('.progress_container');
-    var $time_remaining = $progress_container.find('.time_remaining');
-    var $progress_bar = $progress_container.find('.progress .bar');
-    $('.loading').djcelery({
-        task_id: task_id,
-        check_interval: 5000,
-        on_success: function (task) {
-            $('.loading').hide();
-            var total_time =  task.result.total_time;
-            var url = task.result.url
-            $time_remaining.html('Took ' + total_time + ' seconds to complete.');
-            $progress_container.find('.progress').addClass('hidden');
-            var msg;
-            if (task.result === null) {
-                msg = '<p>No files were modified during the given date range</p>';
-            } else {
-                msg = '<p>Your download is ready</p><p><a href="' + url + '">Download Here</a></p>';
-            }
-            $time_remaining.after(msg);
-        },
-        on_failure: function (task) {
-            $('.loading').hide();
-            var msg = '<p class="error">There was an error generating your download.</p>';
-            $('.results > h4').after(msg);
-        },
-        on_error: function () {
-            $('.loading').hide();
-            var msg = '<p class="error">There was an error generating your download.</p>';
-            $('.results > h4').after(msg);
-        },
-        on_other: function(task_result) {
-            if (task_result.status == 'PROGRESS') {
-
-                // Set the percentage
-                var percent = task_result.result.progress_percent;
-                $progress_bar.css('width', percent + '%');
-
-                // Set time remaining
-                time_remaining = task_result.result.time_remaining;
-                if (time_remaining > 0) {
-                    $time_remaining.html('Approximate time left: ' + Math.round(time_remaining) + ' seconds');
-                }
-            }
-        }
-    });
-});
-    </script>
+      if (data.task.status == "SUCCESS") {
+        window.location.href = "{%url 'result' task_id%}";
+      }
+    })
+  }, 1000);});*/
+</script>
 
 <h2><b>Solving the assignment problem</b></h2>
     <div class="progress">
-        <div class="progress-bar progress-bar-striped active" role="progressbar"
-             aria-valuenow="60"
+        <div class="progress-bar progress-bar-striped active" id="progress" role="progressbar"
+             aria-valuenow="0"
              aria-valuemin="0"
              aria-valuemax="100"
-             style="width: 60%;">
-            <i class="fa fa-circle-o-notch fa-spin"></i> 60%
+             style="width: 0%;">
+            <i class="fa fa-circle-o-notch fa-spin"></i> 0%
         </div>
     </div>
 </div>

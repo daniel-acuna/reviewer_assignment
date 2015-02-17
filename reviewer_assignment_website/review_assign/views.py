@@ -16,7 +16,7 @@ from django.core.files.base import ContentFile
 from django.conf import settings
 import uuid
 
-from review_assign.tasks import LinearProgrammingAssignment
+from review_assign.tasks import LinearProgrammingAssignment2
 
 def docs(request):
     return render_to_response('review_assign/docs_review_assign.html')
@@ -105,65 +105,51 @@ def create_assignment(request, people_fn=None, article_info_fn=None, reviewers_f
         coi_path = os.path.join(settings.MEDIA_ROOT, os.path.join('tmp', coi_fn))
         coi_data = pd.DataFrame.from_csv(coi_path, index_col=None)
 
-    result = LinearProgrammingAssignment.delay_or_fail(reviewer_abstracts=reviewers_data.Abstract.iloc[0:10].tolist(),
-                                                       article_abstracts=article_data.Abstract.iloc[0:10].tolist(),
+    print 'before'
+    result = LinearProgrammingAssignment2.delay_or_fail(reviewer_abstracts=reviewers_data.Abstract.tolist(),
+                                                       article_data=article_data,
+                                                       people_data=people_data,
                                                        min_rev_art=min_rev_art,
                                                        max_rev_art=max_rev_art,
-                                                       min_art_rev=min_art_rev,
-                                                       max_art_rev=max_art_rev)
-
-
+                                                       min_art_rev=min_art_rev)
+                                                       # max_art_rev=max_art_rev)
+    # print 'after'
+    #
+    # return render_to_response('review_assign/progress.html',
+    #                           {'task_id': result.task_id})
+    print 'after'
     return render_to_response('review_assign/progress.html',
-                              {'task_id': result.task_id})
+                              {'task_id': 0})
 
-
-    # result = LinearProgrammingAssignment.delay_or_fail(reviewer_abstracts=reviewers_data.Abstract,
-    #                                                    article_abstracts=article_data.Abstract,
-    #                                                    min_rev_art=min_rev_art,
-    #                                                    max_rev_art=max_rev_art,
-    #                                                    min_art_rev=min_art_rev,
-    #                                                    max_art_rev=max_art_rev)
-
-    #
-    # b = generate_solution(reviewers_data.Abstract, article_data.Abstract,
-    #                       min_rev_art, max_rev_art, min_art_rev, max_art_rev)
-    #
-    # assignment_df = article_data[['PaperID', 'Title']]
-    # assignment_df['Reviewers'] = ''
-    # assignment_df['ReviewerIDs'] = ''
-    # for i in range(b.shape[0]):
-    #     paper_reviewers = np.where(b[i, :])[0]
-    #     assignment_df.Reviewers.iloc[i] = ', '.join(list(people_data.FullName.iloc[paper_reviewers].copy()))
-    #     # assignment_df.ReviewerIDs.iloc[i] = ', '.join(list(people_data.PersonID.iloc[paper_reviewers].copy()))
-    #
-    # # result filename
-    # result_fn = str(uuid.uuid4()) + '.csv'
-    # default_storage.save(os.path.join('tmp', result_fn),
-    #                      ContentFile(assignment_df.to_csv(None, na_rep='', index=False)))
-    #
-    # return HttpResponseRedirect(reverse('result', args=(), kwargs={'result_fn': result_fn}))
-
-
-def result(request, result_fn=None):
+def result(request, task_id=None):
+    # read from celery the results
     # save CSV file
-    assignment_df = pd.read_csv(os.path.join(settings.MEDIA_ROOT, os.path.join('tmp', result_fn)))
+    from reviewer_assignment_website import celery_app
+    result = celery_app.AsyncResult(task_id).get()
+    print result
+
+    assignment_df = pd.read_csv(result)
     assignment_df = assignment_df.fillna('')
     reviewer_assignments_table = AssignmentTable(assignment_df.to_dict('records'))
     return render_to_response('review_assign/result.html',
                               {"reviewer_assignments": reviewer_assignments_table,
-                               "result_fn": result_fn},
+                               "task_id": task_id},
                               context_instance=RequestContext(request))
 
-def download_result(_, result_fn=None):
+def download_result(_, task_id=None):
     import os
     from django.core.servers.basehttp import FileWrapper
     from django.conf import settings
     import mimetypes
+    from reviewer_assignment_website import celery_app
+    from StringIO import StringIO
 
-    filename = os.path.join(settings.MEDIA_ROOT, os.path.join('tmp', result_fn))
-    download_name = result_fn
-    wrapper = FileWrapper(open(filename))
-    content_type = mimetypes.guess_type(filename)[0]
+    result = celery_app.AsyncResult(task_id).get()
+
+    # filename = os.path.join(settings.MEDIA_ROOT, os.path.join('tmp', result_fn))
+    download_name = 'result.csv'
+    wrapper = FileWrapper(StringIO(result))
+    content_type = mimetypes.guess_type(download_name)[0]
     response = HttpResponse(wrapper, content_type=content_type)
     response['Content-Length'] = os.path.getsize(filename)
     response['Content-Disposition'] = "attachment; filename=%s" % download_name
