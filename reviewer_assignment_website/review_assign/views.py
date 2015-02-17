@@ -105,15 +105,25 @@ def create_assignment(request, people_fn=None, article_info_fn=None, reviewers_f
         coi_path = os.path.join(settings.MEDIA_ROOT, os.path.join('tmp', coi_fn))
         coi_data = pd.DataFrame.from_csv(coi_path, index_col=None)
 
-    result = LinearProgrammingAssignment.delay_or_fail(reviewer_abstracts=reviewers_data.Abstract,
-                                                       article_abstracts=article_data.Abstract,
+    result = LinearProgrammingAssignment.delay_or_fail(reviewer_abstracts=reviewers_data.Abstract.iloc[0:10].tolist(),
+                                                       article_abstracts=article_data.Abstract.iloc[0:10].tolist(),
                                                        min_rev_art=min_rev_art,
                                                        max_rev_art=max_rev_art,
                                                        min_art_rev=min_art_rev,
                                                        max_art_rev=max_art_rev)
 
+
     return render_to_response('review_assign/progress.html',
                               {'task_id': result.task_id})
+
+
+    # result = LinearProgrammingAssignment.delay_or_fail(reviewer_abstracts=reviewers_data.Abstract,
+    #                                                    article_abstracts=article_data.Abstract,
+    #                                                    min_rev_art=min_rev_art,
+    #                                                    max_rev_art=max_rev_art,
+    #                                                    min_art_rev=min_art_rev,
+    #                                                    max_art_rev=max_art_rev)
+
     #
     # b = generate_solution(reviewers_data.Abstract, article_data.Abstract,
     #                       min_rev_art, max_rev_art, min_art_rev, max_art_rev)
