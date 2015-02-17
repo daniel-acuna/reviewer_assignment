@@ -16,8 +16,7 @@ from django.core.files.base import ContentFile
 from django.conf import settings
 import uuid
 
-import paper_reviewer_matcher as prm
-import numpy as np
+from review_assign.tasks import LinearProgrammingAssignment
 
 def docs(request):
     return render_to_response('review_assign/docs_review_assign.html')
@@ -62,8 +61,6 @@ class index(FormView):
             max_rev_art = request.POST['maximum_reviews_per_article']
             min_art_rev = request.POST['minimum_articles_per_reviewer']
             max_art_rev = request.POST['maximum_articles_per_reviewer']
-            print request.FILES
-            print request.POST
             return HttpResponseRedirect(reverse('create_assignment', args=(),
                                                 kwargs={'people_fn': people_fn,
                                                         'article_info_fn': article_info_fn,
@@ -108,32 +105,33 @@ def create_assignment(request, people_fn=None, article_info_fn=None, reviewers_f
         coi_path = os.path.join(settings.MEDIA_ROOT, os.path.join('tmp', coi_fn))
         coi_data = pd.DataFrame.from_csv(coi_path, index_col=None)
 
-    # compute assignments
-    a = prm.compute_affinity(reviewers_data.Abstract,
-                             article_data.Abstract)
+    result = LinearProgrammingAssignment.delay_or_fail(reviewer_abstracts=reviewers_data.Abstract,
+                                                       article_abstracts=article_data.Abstract,
+                                                       min_rev_art=min_rev_art,
+                                                       max_rev_art=max_rev_art,
+                                                       min_art_rev=min_art_rev,
+                                                       max_art_rev=max_art_rev)
+
+    return render_to_response('review_assign/progress.html',
+                              {'task_id': result.task_id})
     #
-    v, ne, d = prm.create_lp_matrices(a, min_rev_art, max_rev_art,
-                                      min_art_rev, max_art_rev)
-
-    x = prm.linprog_solve(v, ne, d)
-    x = (x > 0.5)
-
-    b = prm.create_assignment(x, a)
-
-    assignment_df = article_data[['PaperID', 'Title']]
-    assignment_df['Reviewers'] = ''
-    assignment_df['ReviewerIDs'] = ''
-    for i in range(b.shape[0]):
-        paper_reviewers = np.where(b[i, :])[0]
-        assignment_df.Reviewers.iloc[i] = ', '.join(list(people_data.FullName.iloc[paper_reviewers].copy()))
-        # assignment_df.ReviewerIDs.iloc[i] = ', '.join(list(people_data.PersonID.iloc[paper_reviewers].copy()))
-
-    # result filename
-    result_fn = str(uuid.uuid4()) + '.csv'
-    default_storage.save(os.path.join('tmp', result_fn),
-                         ContentFile(assignment_df.to_csv(None, na_rep='', index=False)))
-
-    return HttpResponseRedirect(reverse('result', args=(), kwargs={'result_fn': result_fn}))
+    # b = generate_solution(reviewers_data.Abstract, article_data.Abstract,
+    #                       min_rev_art, max_rev_art, min_art_rev, max_art_rev)
+    #
+    # assignment_df = article_data[['PaperID', 'Title']]
+    # assignment_df['Reviewers'] = ''
+    # assignment_df['ReviewerIDs'] = ''
+    # for i in range(b.shape[0]):
+    #     paper_reviewers = np.where(b[i, :])[0]
+    #     assignment_df.Reviewers.iloc[i] = ', '.join(list(people_data.FullName.iloc[paper_reviewers].copy()))
+    #     # assignment_df.ReviewerIDs.iloc[i] = ', '.join(list(people_data.PersonID.iloc[paper_reviewers].copy()))
+    #
+    # # result filename
+    # result_fn = str(uuid.uuid4()) + '.csv'
+    # default_storage.save(os.path.join('tmp', result_fn),
+    #                      ContentFile(assignment_df.to_csv(None, na_rep='', index=False)))
+    #
+    # return HttpResponseRedirect(reverse('result', args=(), kwargs={'result_fn': result_fn}))
 
 
 def result(request, result_fn=None):

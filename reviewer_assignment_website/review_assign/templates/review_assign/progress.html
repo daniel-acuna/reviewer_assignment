@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% load django_tables2 %}
+
+{% block content %}
+<div class="col-md-12">
+    <div id="task_progress">
+        <p class="loading">Updating user accounts in bulk</p>
+        <p class="loading progress_percentage"></p>
+        <p class="loading progress_estimate">
+            Waiting for an available bulk update worker.
+            This might take several minutes if many other people are running reports
+            or performing uploads.
+        </p>
+    </div>
+<script>
+        var djceleryConfigs = {
+            taskId: "{{task_id}}",
+            selector: '#task_progress',
+            failureCallback: function (task) {
+                $('#bulk_account_update_form').show();
+            },
+            table: {
+                success: {
+                    resultsTable: "#upload_success_results",
+                    captionCallback: function (parsedResult) {
+                        return "Bulk update completed successfully";
+                    },
+                    columns: [
+                                 ["Users Created", "created"],
+                                 ["Users Updated", "updated"]
+                    ],
+                    options: {
+                        'bFilter': false,
+                        'bInfo': false,
+                        'bLengthChange': false,
+                        'bPaginate': false,
+                        'bSort': false
+                    },
+                    callback: function () {
+                        $('#bulk_account_update_form').show();
+                    }
+                },
+                error: {
+                    resultsTable: "#csv_validation_errors",
+                    captionCallback: function (parsedResult) {
+                        var msg = "There are <strong>";
+                        msg += parsedResult.rowData.length;
+                        msg += "</strong> problem(s) with your CSV file.";
+                        return msg;
+                    },
+                    columns: [
+                                 ["Row", "row"],
+                                 ["Problem", "message"],
+                                 ["Content", "record"]
+                    ],
+                    options: {
+                        'iDisplayLength': 50
+                    },
+                    callback: function () {
+                        $('#task_progress').before(
+                              '<div class="error">' +
+                                  'Please correct these problems and try again' +
+                              '</div>'
+                        );
+                        $('#bulk_account_update_form').show();
+                    }
+                }
+            }
+        };
+    </script>
+
+<h2><b>Solving the assignment problem</b></h2>
+    <div class="progress">
+        <div class="progress-bar progress-bar-striped active" role="progressbar"
+             aria-valuenow="60"
+             aria-valuemin="0"
+             aria-valuemax="100"
+             style="width: 60%;">
+            <i class="fa fa-circle-o-notch fa-spin"></i> 60%
+        </div>
+    </div>
+</div>
+<div class="col-md-12">
+    <a class="btn btn-warning" href="{%url 'review_assign_index' %}">Start over</a>
+</div>
+{% endblock %}
