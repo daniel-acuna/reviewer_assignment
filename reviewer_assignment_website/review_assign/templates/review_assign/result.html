@@ -8,7 +8,7 @@
         If you are not satisfied the result, you can add conflict of interest (COI) file or rerun the assignment.
     </p>
 <h3>Authors and reviewer's information</h3>
-<a class="btn btn-primary" href="{%url 'download_result' result_fn=result_fn %}"><i class="fa fa-download"></i>  Download Results (.CSV)</a>
+<a class="btn btn-primary" href="{%url 'download_result' task_id=task_id%}"><i class="fa fa-download"></i>  Download Results (.CSV)</a>
 {% render_table reviewer_assignments %}
 </div>
 {% endblock %}

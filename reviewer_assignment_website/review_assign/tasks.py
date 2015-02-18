@@ -43,6 +43,7 @@ class LinearProgrammingAssignment(JobtasticTask):
         # sleep(1)
         print "0"
         # this performs the topic modeling (LSA)
+        # a = prm.compute_affinity(reviewer_abstracts[0:10], article_data.Abstract.iloc[0:10])
         a = prm.compute_affinity(reviewer_abstracts, article_data.Abstract)
         self.update_progress(
                 2,
@@ -76,7 +77,6 @@ class LinearProgrammingAssignment(JobtasticTask):
         print "3"
 
         assignment_df = article_data[['PaperID', 'Title']]
-        assignment_df.Title.apply(lambda x: unicode(x))
         assignment_df['Reviewers'] = ''
         assignment_df['ReviewerIDs'] = ''
         for i in range(b.shape[0]):
@@ -88,6 +88,11 @@ class LinearProgrammingAssignment(JobtasticTask):
                 6,
                 update_frequency=update_frequency,
         )
+
+        # transform to ascii
+        assignment_df.Title.apply(lambda x: unicode(x))
+        assignment_df.Reviewers.apply(lambda x: unicode(x))
+
         # , 'result': assignment_df.to_csv(None, na_rep='', index=False)
         # return {'task': {'status': 'SUCCESS'}}
-        return assignment_df.to_csv(None, na_rep='', index=False)
+        return assignment_df.to_csv(None, na_rep='', index=False, encoding='utf-8')

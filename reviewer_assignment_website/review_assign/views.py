@@ -122,10 +122,11 @@ def result(request, task_id=None):
     # read from celery the results
     # save CSV file
     from reviewer_assignment_website import celery_app
+    from StringIO import StringIO
     result = celery_app.AsyncResult(task_id).get()
     print result
 
-    assignment_df = pd.read_csv(result)
+    assignment_df = pd.read_csv(StringIO(result))
     assignment_df = assignment_df.fillna('')
     reviewer_assignments_table = AssignmentTable(assignment_df.to_dict('records'))
     return render_to_response('review_assign/result.html',
@@ -144,11 +145,10 @@ def download_result(_, task_id=None):
     result = celery_app.AsyncResult(task_id).get()
 
     # filename = os.path.join(settings.MEDIA_ROOT, os.path.join('tmp', result_fn))
-    download_name = 'result.csv'
+    download_name = 'result_%s.csv' % (task_id)
     wrapper = FileWrapper(StringIO(result))
     content_type = mimetypes.guess_type(download_name)[0]
     response = HttpResponse(wrapper, content_type=content_type)
-    response['Content-Length'] = os.path.getsize(filename)
+    response['Content-Length'] = len(result)
     response['Content-Disposition'] = "attachment; filename=%s" % download_name
     return response
-

@@ -12,9 +12,9 @@ $(document).ready(function(){
         $("#progress").css('width',data.task.result.progress_percent+'%');
         /* and display the numeric value */
         $("#text_percent").html(Math.round(data.task.result.progress_percent) + '%');
-        if (data.task.status == "SUCCESS") {
+      }
+      if (data.task.status == "SUCCESS") {
             window.location.href = "{%url 'result' task_id%}";
-        }
       }
       if (data.task.status == "FAILURE") {
         /* update the progress bar width */
@@ -36,8 +36,8 @@ $(document).ready(function(){
              aria-valuenow="0"
              aria-valuemin="0"
              aria-valuemax="100"
-             style="width: 0%;">
-            <i class="fa fa-circle-o-notch fa-spin"></i> <span id="text_percent">0%</span>
+             style="min-width: 4em; width: 0%;">
+            <i class="fa fa-circle-o-notch fa-spin"></i> <span id="text_percent"> 0% </span>
         </div>
     </div>
 </div>
