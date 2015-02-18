@@ -1,10 +1,15 @@
 from jobtastic import JobtasticTask
 import paper_reviewer_matcher as prm
+from scipy.sparse import coo_matrix
+try:
+    from ortools.linear_solver import pywraplp
+except ImportError:
+    print "or-tools does not seem to be installed. Skipping for now"
 
-from time import sleep
 import numpy as np
 import pandas as pd
 from unidecode import unidecode
+
 
 class LinearProgrammingAssignment(JobtasticTask):
 
@@ -19,9 +24,9 @@ class LinearProgrammingAssignment(JobtasticTask):
     ]
 
     # How long should we give a task before assuming it has failed?
-    herd_avoidance_timeout = 5*60  # Shouldn't take more than 60 seconds
+    herd_avoidance_timeout = 5*60  # Shouldn't take more than 5*60 seconds
     # How long we want to cache results with identical ``significant_kwargs``
-    cache_duration = -1  # Cache these results forever. Math is pretty stable.
+    cache_duration = -1  # No cache
     # Note: 0 means different things in different cache backends. RTFM for yours.
 
     def calculate_result(self, reviewer_abstracts, article_data, people_data,
@@ -30,51 +35,98 @@ class LinearProgrammingAssignment(JobtasticTask):
         Generates a csv file with the resulting assignment while it updates the status
         of the process using Celery
         """
+
+        cur_progress = 0
+        max_progress = 100
+
         article_data = pd.DataFrame(article_data)
         people_data = pd.DataFrame(people_data)
 
-        print "lajsldjjdsa"
         update_frequency = 1
+        cur_progress += int(max_progress/6.)
         self.update_progress(
-                1,
-                6,
+                cur_progress,
+                max_progress,
                 update_frequency=update_frequency,
             )
-        # sleep(1)
-        print "0"
+
+
         # this performs the topic modeling (LSA)
         # a = prm.compute_affinity(reviewer_abstracts[0:10], article_data.Abstract.iloc[0:10])
         a = prm.compute_affinity(reviewer_abstracts, article_data.Abstract)
+        cur_progress += int(max_progress/6.)
         self.update_progress(
-                2,
-                6,
+                cur_progress,
+                max_progress,
                 update_frequency=update_frequency,
             )
-        # sleep(1)
-        v, ne, d = prm.create_lp_matrices(a, min_rev_art, max_rev_art,
+
+        v, A, d = prm.create_lp_matrices(a, min_rev_art, max_rev_art,
                                           min_art_rev, max_art_rev)
+        v = v.flatten()
+        d = d.flatten()
+
+        cur_progress += int(max_progress/6.)
         self.update_progress(
-                3,
-                6,
+                cur_progress,
+                max_progress,
                 update_frequency=update_frequency,
             )
-        # sleep(1)
-        print "1"
-        x = prm.linprog_solve(v, ne, d)
-        x = (x > 0.5)
+
+        solver = pywraplp.Solver('SolveReviewerAssignment',
+                                 pywraplp.Solver.GLOP_LINEAR_PROGRAMMING)
+        infinity = solver.Infinity()
+        n, m = A.shape
+        x = [[]]*m
+        c = [0]*n
+
+        for j in range(m):
+            x[j] = solver.NumVar(-infinity, infinity, 'x_%u' % j)
+
+        # state objective function
+        objective = solver.Objective()
+        for j in range(m):
+            objective.SetCoefficient(x[j], v[j])
+        objective.SetMaximization()
+
+        # state the constraints
+        for i in range(n):
+            c[i] = solver.Constraint(-infinity, d[i])
+
+            # update status bar
+            if np.mod(i, int(n/10)) == 0:
+                cur_progress += 3
+                self.update_progress(
+                    cur_progress,
+                    max_progress,
+                    update_frequency=update_frequency,
+                )
+
+            for j in A.col[A.row == i]:
+                c[i].SetCoefficient(x[j], A.data[np.logical_and(A.row == i, A.col == j)][0])
+
+        result_status = solver.Solve()
+        if result_status != 0:
+            print "The final solution might not converged"
+
+        x_sol = np.array([x_tmp.SolutionValue() for x_tmp in x])
+
+        #x = prm.linprog_solve(v, ne, d)
+        x_sol = (x_sol > 0.5)
+
+        cur_progress += int(max_progress/6.)
         self.update_progress(
-                4,
-                6,
+                4*int(max_progress/6.),
+                max_progress,
                 update_frequency=update_frequency,
             )
-        print "2"
-        b = prm.create_assignment(x, a)
+
+        b = prm.create_assignment(x_sol, a)
         self.update_progress(
-                5,
-                6,
+                5*int(max_progress/6.),
+                max_progress,
                 update_frequency=update_frequency,
             )
-        print "3"
 
         assignment_df = article_data[['PaperID', 'Title']]
         assignment_df['Reviewers'] = ''
@@ -84,8 +136,8 @@ class LinearProgrammingAssignment(JobtasticTask):
             assignment_df.Reviewers.iloc[i] = ', '.join(list(people_data.FullName.iloc[paper_reviewers].copy()))
             # assignment_df.ReviewerIDs.iloc[i] = ', '.join(list(people_data.PersonID.iloc[paper_reviewers].copy()))
         self.update_progress(
-                6,
-                6,
+                6*int(max_progress/6.),
+                max_progress,
                 update_frequency=update_frequency,
         )
 

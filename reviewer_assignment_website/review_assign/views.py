@@ -105,7 +105,6 @@ def create_assignment(request, people_fn=None, article_info_fn=None, reviewers_f
         coi_path = os.path.join(settings.MEDIA_ROOT, os.path.join('tmp', coi_fn))
         coi_data = pd.DataFrame.from_csv(coi_path, index_col=None)
 
-    print 'before'
     result = LinearProgrammingAssignment.delay_or_fail(reviewer_abstracts=reviewers_data.Abstract.tolist(),
                                                        article_data=article_data.to_dict(),
                                                        people_data=people_data.to_dict(),
@@ -113,8 +112,7 @@ def create_assignment(request, people_fn=None, article_info_fn=None, reviewers_f
                                                        max_rev_art=max_rev_art,
                                                        min_art_rev=min_art_rev,
                                                        max_art_rev=max_art_rev)
-    # print 'after'
-    #
+
     return render_to_response('review_assign/progress.html',
                               {'task_id': result.task_id})
 
