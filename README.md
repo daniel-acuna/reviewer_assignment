@@ -19,8 +19,9 @@ Website that implements the reviewer-article assignment system.
   - [unidecode](https://pypi.python.org/pypi/Unidecode)
   - [Django Crispy Forms](http://django-crispy-forms.readthedocs.org/en/latest/)
   - [Django Tables 2](https://django-tables2.readthedocs.org/en/latest/)
-  - [Glop (Google's linear programming system)](https://developers.google.com/optimization/lp/glop)
-  
+  - [Glop (Google's linear programming solver)](https://developers.google.com/optimization/lp/glop)
+  - [Celery] (http://www.celeryproject.org/)
+  - [Django-celery] (https://pypi.python.org/pypi/django-celery)
 
 # Installation
 
