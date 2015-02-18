@@ -16,7 +16,7 @@ from django.core.files.base import ContentFile
 from django.conf import settings
 import uuid
 
-from review_assign.tasks import LinearProgrammingAssignment2
+from review_assign.tasks import LinearProgrammingAssignment
 
 def docs(request):
     return render_to_response('review_assign/docs_review_assign.html')
@@ -106,20 +106,17 @@ def create_assignment(request, people_fn=None, article_info_fn=None, reviewers_f
         coi_data = pd.DataFrame.from_csv(coi_path, index_col=None)
 
     print 'before'
-    result = LinearProgrammingAssignment2.delay_or_fail(reviewer_abstracts=reviewers_data.Abstract.tolist(),
-                                                       article_data=article_data,
-                                                       people_data=people_data,
+    result = LinearProgrammingAssignment.delay_or_fail(reviewer_abstracts=reviewers_data.Abstract.tolist(),
+                                                       article_data=article_data.to_dict(),
+                                                       people_data=people_data.to_dict(),
                                                        min_rev_art=min_rev_art,
                                                        max_rev_art=max_rev_art,
-                                                       min_art_rev=min_art_rev)
-                                                       # max_art_rev=max_art_rev)
+                                                       min_art_rev=min_art_rev,
+                                                       max_art_rev=max_art_rev)
     # print 'after'
     #
-    # return render_to_response('review_assign/progress.html',
-    #                           {'task_id': result.task_id})
-    print 'after'
     return render_to_response('review_assign/progress.html',
-                              {'task_id': 0})
+                              {'task_id': result.task_id})
 
 def result(request, task_id=None):
     # read from celery the results

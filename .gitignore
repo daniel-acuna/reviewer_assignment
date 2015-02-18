@@ -63,7 +63,7 @@ target/
 *.pyc
 __pycache__/
 local_settings.py
-
+*.sqlite3
 
 ### IPythonNotebook ###
 # Temporary data

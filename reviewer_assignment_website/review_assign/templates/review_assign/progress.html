@@ -4,28 +4,30 @@
 {% block content %}
 <div class="col-md-12">
 <script>
-/*$(document).ready(function(){
-  var last_percent = -1
+$(document).ready(function(){
   var progresspump = setInterval(function(){
     $.get("{% url 'celery-task_status' task_id %}", function(data){
-      //var result_progress = jQuery.parseJSON(data)
-
       if (data.task.status == "PROGRESS") {
-        if (data.task.progress_percent != last_percent) {
-            /* update the progress bar width */
-            $("#progress").css('width',data.task.result.progress_percent+'%');
-
-           /* and display the numeric value */
-           $("#progress").html('<i class="fa fa-circle-o-notch fa-spin"></i> ' + data.task.result.progress_percent + '%');
-           last_percent = data.task.progress_percent;
+        /* update the progress bar width */
+        $("#progress").css('width',data.task.result.progress_percent+'%');
+        /* and display the numeric value */
+        $("#text_percent").html(Math.round(data.task.result.progress_percent) + '%');
+        if (data.task.status == "SUCCESS") {
+            window.location.href = "{%url 'result' task_id%}";
         }
       }
+      if (data.task.status == "FAILURE") {
+        /* update the progress bar width */
+        $("#progress").css('width',0+'%');
 
-      if (data.task.status == "SUCCESS") {
-        window.location.href = "{%url 'result' task_id%}";
+        /* and display the numeric value */
+        $("#text_percent").html();
+        $("#button_reset").html('Failure: ' + data.task.result);
+        $("#button_reset.btn-warning").toggleClass('btn-danger');
+        window.clearInterval(progresspump);
       }
     })
-  }, 1000);});*/
+  }, 1000);});
 </script>
 
 <h2><b>Solving the assignment problem</b></h2>
@@ -35,11 +37,11 @@
              aria-valuemin="0"
              aria-valuemax="100"
              style="width: 0%;">
-            <i class="fa fa-circle-o-notch fa-spin"></i> 0%
+            <i class="fa fa-circle-o-notch fa-spin"></i> <span id="text_percent">0%</span>
         </div>
     </div>
 </div>
 <div class="col-md-12">
-    <a class="btn btn-warning" href="{%url 'review_assign_index' %}">Start over</a>
+    <a class="btn btn-warning" href="{%url 'review_assign_index' %}" id="button_reset">Start over</a>
 </div>
 {% endblock %}
