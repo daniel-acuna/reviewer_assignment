@@ -1,6 +1,6 @@
 # Unsupervised reviewer-article assignment based on topic models*
 
-Website that implements the reviewer-article assignment system. 
+Website that implements the reviewer-article assignment system based on Django, Python web framework.
 
 **This is work-in-progress. Please use at your own risk*
 
@@ -20,12 +20,32 @@ Website that implements the reviewer-article assignment system.
   - [Django Crispy Forms](http://django-crispy-forms.readthedocs.org/en/latest/)
   - [Django Tables 2](https://django-tables2.readthedocs.org/en/latest/)
   - [Glop (Google's linear programming solver)](https://developers.google.com/optimization/lp/glop)
-  - [Celery] (http://www.celeryproject.org/)
-  - [Django-celery] (https://pypi.python.org/pypi/django-celery)
+  - [Celery](http://www.celeryproject.org/)
+  - [Django-celery](https://pypi.python.org/pypi/django-celery)
 
 # Installation
 
-Installation instructions soon (will be added to documentation page).
+We provide `requirements.txt` for all the requirements that we need. After cloning repository, you can do:
+
+```bash
+pip install -r requirement.txt
+```
+
+In addition of the requirement, we need to install `or-tools` which has installation document on this [link](https://code.google.com/p/or-tools/wiki/AGettingStarted). For Mac OSX, you might find problem installing `or-tools` where we solve that using `easy-install` (see this [issue](https://github.com/daniel-acuna/reviewer_assignment/issues/20))
+
+# Usage
+
+Local usage to launch the website can be created by hovering to where `manage.py` located. Then, you can launch celery worker by running:
+
+```python
+celery -A reviewer_assignment_website worker
+```
+
+Afterward, you can run the server as follows:
+
+```python
+python manage.py runserver
+```
 
 # License
 
