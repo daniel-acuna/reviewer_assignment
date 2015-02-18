@@ -13,7 +13,7 @@ $(document).ready(function(){
         $("#text_percent").html(Math.round(data.task.result.progress_percent) + '%');
       }
       if (data.task.status == "SUCCESS") {
-            window.location.href = "{%url 'result' task_id%}";
+            window.location.href = "{%url result_view task_id%}";
       }
       if (data.task.status == "FAILURE") {
         /* update the progress bar width */
@@ -29,7 +29,7 @@ $(document).ready(function(){
   }, 1000);});
 </script>
 
-<h2><b>Solving the assignment problem</b></h2>
+<h2><b>{{progress_title}}</b></h2>
     <div class="progress">
         <div class="progress-bar progress-bar-striped active" id="progress" role="progressbar"
              aria-valuenow="0"
@@ -41,6 +41,6 @@ $(document).ready(function(){
     </div>
 </div>
 <div class="col-md-12">
-    <a class="btn btn-warning" href="{%url 'review_assign_index' %}" id="button_reset">Start over</a>
+    <a class="btn btn-warning" href="{%url 'cancel_task' task_id start_over_view %}" id="button_reset">Start over</a>
 </div>
 {% endblock %}

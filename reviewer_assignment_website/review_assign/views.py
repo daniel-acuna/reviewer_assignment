@@ -5,7 +5,6 @@ from django.template import RequestContext
 from review_assign.forms import SubmitAssingmentInformation
 from django.views.generic import FormView
 from django.http import HttpResponseRedirect, HttpResponse
-from django.core.files.base import ContentFile
 import django_tables2 as tables
 from django.core.urlresolvers import reverse
 import pandas as pd
@@ -14,18 +13,14 @@ import os
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from django.conf import settings
-import uuid
+
+from utils import get_file_path
 
 from review_assign.tasks import LinearProgrammingAssignment
 
 def docs(request):
     return render_to_response('review_assign/docs_review_assign.html')
 
-
-def get_file_path(filename):
-    ext = filename.split('.')[-1]
-    filename = "%s.%s" % (uuid.uuid4(), ext)
-    return filename
 
 class index(FormView):
     template_name = 'review_assign/submit.html'
@@ -105,7 +100,7 @@ def create_assignment(request, people_fn=None, article_info_fn=None, reviewers_f
         coi_path = os.path.join(settings.MEDIA_ROOT, os.path.join('tmp', coi_fn))
         coi_data = pd.DataFrame.from_csv(coi_path, index_col=None)
 
-    result = LinearProgrammingAssignment.delay_or_fail(reviewer_abstracts=reviewers_data.Abstract.tolist(),
+    task = LinearProgrammingAssignment.delay_or_fail(reviewer_abstracts=reviewers_data.Abstract.tolist(),
                                                        article_data=article_data.to_dict(),
                                                        people_data=people_data.to_dict(),
                                                        min_rev_art=min_rev_art,
@@ -113,8 +108,11 @@ def create_assignment(request, people_fn=None, article_info_fn=None, reviewers_f
                                                        min_art_rev=min_art_rev,
                                                        max_art_rev=max_art_rev)
 
-    return render_to_response('review_assign/progress.html',
-                              {'task_id': result.task_id})
+    return render_to_response('progress.html',
+                              {'task_id': task.task_id,
+                               'progress_title': 'Solving the assignment problem',
+                               'result_view': 'result',
+                               'start_over_view': 'review_assign_index'})
 
 def result(request, task_id=None):
     # read from celery the results
@@ -140,13 +138,12 @@ def download_result(_, task_id=None):
     from reviewer_assignment_website import celery_app
     from StringIO import StringIO
 
-    result = celery_app.AsyncResult(task_id).get()
+    task_results = celery_app.AsyncResult(task_id).get()
 
-    # filename = os.path.join(settings.MEDIA_ROOT, os.path.join('tmp', result_fn))
-    download_name = 'result_%s.csv' % (task_id)
-    wrapper = FileWrapper(StringIO(result))
+    download_name = 'result_%s.csv' % task_id
+    wrapper = FileWrapper(StringIO(task_results))
     content_type = mimetypes.guess_type(download_name)[0]
     response = HttpResponse(wrapper, content_type=content_type)
-    response['Content-Length'] = len(result)
+    response['Content-Length'] = len(task_results)
     response['Content-Disposition'] = "attachment; filename=%s" % download_name
     return response

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="col-md-12">
+    <h2><b>Reviewer scores uploader</b></h2>
+</div>
+<div class="col-md-12">
+    {% crispy form %}
+</div>
+{% endblock %}
