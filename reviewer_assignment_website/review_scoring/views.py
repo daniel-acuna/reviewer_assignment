@@ -9,6 +9,7 @@ from django.http import HttpResponse
 from django.core.servers.basehttp import FileWrapper
 
 import django_tables2 as tables
+from django_tables2 import RequestConfig
 
 from review_scoring.forms import SubmitScoreInformation
 from review_scoring.tasks import ArticleScoring
@@ -66,6 +67,9 @@ def result(request, task_id=None):
     scoring_df = pd.read_csv(StringIO(task_results))
     scoring_df = scoring_df.fillna('')
     scoring_results_table = ScoringTable(scoring_df.to_dict('records'))
+    config = RequestConfig(request)
+    config.paginate = False
+    config.configure(scoring_results_table)
     return render_to_response('review_scoring/result.html',
                               {"scoring_results": scoring_results_table,
                                "task_id": task_id,

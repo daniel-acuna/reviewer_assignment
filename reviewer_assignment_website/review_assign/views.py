@@ -6,6 +6,7 @@ from review_assign.forms import SubmitAssingmentInformation
 from django.views.generic import FormView
 from django.http import HttpResponseRedirect, HttpResponse
 import django_tables2 as tables
+from django_tables2 import RequestConfig
 from django.core.urlresolvers import reverse
 import pandas as pd
 
@@ -119,12 +120,13 @@ def result(request, task_id=None):
     # save CSV file
     from reviewer_assignment_website import celery_app
     from StringIO import StringIO
-    result = celery_app.AsyncResult(task_id).get()
-    print result
-
-    assignment_df = pd.read_csv(StringIO(result))
+    task_results = celery_app.AsyncResult(task_id).get()
+    assignment_df = pd.read_csv(StringIO(task_results))
     assignment_df = assignment_df.fillna('')
     reviewer_assignments_table = AssignmentTable(assignment_df.to_dict('records'))
+    config = RequestConfig(request)
+    config.paginate = False
+    config.configure(reviewer_assignments_table)
     return render_to_response('review_assign/result.html',
                               {"reviewer_assignments": reviewer_assignments_table,
                                "task_id": task_id},
