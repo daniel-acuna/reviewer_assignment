@@ -1,6 +1,7 @@
 # Unsupervised reviewer-article assignment based on topic models*
 
 Website that implements the reviewer-article assignment system based on Django, Python web framework.
+You can try an example website [here](http://www.scienceofscience.org/reviewer_assignment) where we run on Amazon EC2 cluster.
 
 **This is work-in-progress. Please use at your own risk*
 
