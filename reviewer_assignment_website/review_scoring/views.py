@@ -15,6 +15,12 @@ from review_scoring.tasks import ArticleScoring
 
 from reviewer_assignment_website import celery_app
 
+import numpy as np
+import mpld3
+import matplotlib
+import matplotlib.mlab as mlab
+import matplotlib.pyplot as plt
+
 
 def docs(_):
     return render_to_response('review_scoring/docs_review_scoring.html')
@@ -48,6 +54,9 @@ class ScoringTable(tables.Table):
     Mean = tables.Column(verbose_name='Mean score')
     SD = tables.Column(verbose_name='Uncertainty')
 
+    class Meta:
+        attrs = {'class': 'score_table_style'}
+
 
 def result(request, task_id=None):
     # read from celery the results
@@ -58,7 +67,8 @@ def result(request, task_id=None):
     scoring_results_table = ScoringTable(scoring_df.to_dict('records'))
     return render_to_response('review_scoring/result.html',
                               {"scoring_results": scoring_results_table,
-                               "task_id": task_id},
+                               "task_id": task_id,
+                               "scoring_plot": create_html_plot_tooltip(scoring_df)},
                               context_instance=RequestContext(request))
 
 
@@ -72,3 +82,120 @@ def download_result(_, task_id=None):
     response['Content-Length'] = len(task_results)
     response['Content-Disposition'] = "attachment; filename=%s" % download_name
     return response
+
+
+class BayesView(mpld3.plugins.PluginBase):
+    """class for plotting the Bayes scoring result"""
+
+    JAVASCRIPT = """
+    mpld3.register_plugin("linkedview", LinkedViewPlugin);
+    LinkedViewPlugin.prototype = Object.create(mpld3.Plugin.prototype);
+    LinkedViewPlugin.prototype.constructor = LinkedViewPlugin;
+    LinkedViewPlugin.prototype.requiredProps = ["idpts", "idline", "data"];
+    LinkedViewPlugin.prototype.defaultProps = {}
+    function LinkedViewPlugin(fig, props){
+        mpld3.Plugin.call(this, fig, props);
+    };
+
+    LinkedViewPlugin.prototype.draw = function(){
+      var pts = mpld3.get_element(this.props.idpts);
+      var line = mpld3.get_element(this.props.idline);
+      var data = this.props.data;
+
+      function mouseover(d, i){
+        line.data = data[i];
+        line.elements().transition()
+            .attr("d", line.datafunc(line.data))
+            .style("stroke", this.style.fill);
+      }
+      pts.elements().on("mouseover", mouseover);
+    };
+    """
+
+    def __init__(self, points, line, linedata):
+        if isinstance(points, matplotlib.lines.Line2D):
+            suffix = "pts"
+        else:
+            suffix = None
+
+        self.dict_ = {"type": "linkedview",
+                      "idpts": mpld3.utils.get_id(points, suffix),
+                      "idline": mpld3.utils.get_id(line),
+                      "data": linedata}
+
+
+def create_html_plot(scores_df):
+    """
+    Giving score dataframe, create a scatter html plot based on d3
+    """
+    fig, ax = plt.subplots(2)
+    bayes_mean = np.array(scores_df['Mean'])
+    bayes_sd = np.array(scores_df['SD'])
+    x = np.linspace(np.min(bayes_mean)-2*np.max(bayes_sd),
+                    np.max(bayes_mean)+2*np.max(bayes_sd), 100)
+    data = np.array([[x, mlab.normpdf(x, bayes_mean_i, bayes_sd_i)]
+                     for (bayes_mean_i, bayes_sd_i) in zip(bayes_mean, bayes_sd)])
+
+    # scatter periods and amplitudes
+    scatter_plot = ax[0].scatter(bayes_mean, bayes_sd,
+                                 c=bayes_mean,
+                                 cmap='RdYlGn',
+                                 s=15, alpha=0.5)
+    ax[0].set_xlabel('Mean Scores')
+    ax[0].set_ylabel('Uncertainty')
+
+    lines = ax[1].plot(x, 0*x, '-w', lw=3, alpha=0.5)
+    ax[1].set_ylim(0, 1)
+    ax[1].set_title("Bayesian Scores (Hover on the scatter plot)")
+    ax[1].set_xlabel("Score")
+    ax[1].set_ylabel("Probability")
+
+    line_data = data.transpose(0, 2, 1).tolist()
+    mpld3.plugins.connect(fig, BayesView(scatter_plot, lines[0], line_data))
+
+    return mpld3.fig_to_html(fig)
+
+
+def create_html_plot_tooltip(scores_df):
+    """
+    Giving score dataframe, create scatter plot with tooltip
+    """
+    css = """
+    table, th, td
+    {
+      background-color: #FFFFFF;
+      font-family:Lato;
+    }
+    """
+    matplotlib.rcParams.update({'font.size': 20})
+
+    fig, ax = plt.subplots(1)
+    bayes_mean = np.array(scores_df['Mean'])
+    bayes_sd = np.array(scores_df['SD'])
+    x = np.linspace(np.min(bayes_mean)-2*np.max(bayes_sd),
+                    np.max(bayes_mean)+2*np.max(bayes_sd), 40)
+    data = np.array([[x, mlab.normpdf(x, bayes_mean_i, bayes_sd_i)]
+                     for (bayes_mean_i, bayes_sd_i) in zip(bayes_mean, bayes_sd)])
+
+    scatter_plot = ax.scatter(bayes_mean, bayes_sd,
+                           c=bayes_mean,
+                           cmap='RdYlGn',
+                           s=30, alpha=0.5)
+
+
+    labels=[]
+    for i in range(len(scores_df)):
+        label = scores_df.ix[[i], :].T
+        labels.append(str(label.to_html()))
+
+    ax.set_xlabel('Mean Scores')
+    ax.set_ylabel('Uncertainty')
+
+    tooltip = mpld3.plugins.PointHTMLTooltip(scatter_plot,
+                                              labels=labels,
+                                              css=css,
+                                              voffset=10,
+                                              hoffset=10)
+    mpld3.plugins.connect(fig, tooltip)
+
+    return mpld3.fig_to_html(fig)

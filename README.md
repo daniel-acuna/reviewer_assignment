@@ -22,8 +22,10 @@ Website that implements the reviewer-article assignment system based on Django, 
   - [Glop (Google's linear programming solver)](https://developers.google.com/optimization/lp/glop)
   - [Celery](http://www.celeryproject.org/)
   - [Django-celery](https://pypi.python.org/pypi/django-celery)
-  - [rpy2] (http://rpy.sourceforge.net/)
-  - [R] (http://www.r-project.org/) with the [ARM package] (http://cran.r-project.org/web/packages/arm/index.html)
+  - [rpy2](http://rpy.sourceforge.net/)
+  - [R](http://www.r-project.org/) with the [ARM package](http://cran.r-project.org/web/packages/arm/index.html)
+  - [mpld3](https://mpld3.github.io/index.html)
+
 
 # Installation
 
