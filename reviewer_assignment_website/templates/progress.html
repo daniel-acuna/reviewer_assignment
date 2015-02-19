@@ -13,7 +13,8 @@ $(document).ready(function(){
         $("#text_percent").html(Math.round(data.task.result.progress_percent) + '%');
       }
       if (data.task.status == "SUCCESS") {
-            window.location.href = "{%url result_view task_id%}";
+            window.clearInterval(progresspump);
+            window.location.replace("{%url result_view task_id%}");
       }
       if (data.task.status == "FAILURE") {
         /* update the progress bar width */

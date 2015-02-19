@@ -19,7 +19,8 @@ import numpy as np
 import mpld3
 import matplotlib
 import matplotlib.mlab as mlab
-import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 
 
 def docs(_):
@@ -136,25 +137,6 @@ def create_html_plot(scores_df):
     data = np.array([[x, mlab.normpdf(x, bayes_mean_i, bayes_sd_i)]
                      for (bayes_mean_i, bayes_sd_i) in zip(bayes_mean, bayes_sd)])
 
-    # scatter periods and amplitudes
-    scatter_plot = ax[0].scatter(bayes_mean, bayes_sd,
-                                 c=bayes_mean,
-                                 cmap='RdYlGn',
-                                 s=15, alpha=0.5)
-    ax[0].set_xlabel('Mean Scores')
-    ax[0].set_ylabel('Uncertainty')
-
-    lines = ax[1].plot(x, 0*x, '-w', lw=3, alpha=0.5)
-    ax[1].set_ylim(0, 1)
-    ax[1].set_title("Bayesian Scores (Hover on the scatter plot)")
-    ax[1].set_xlabel("Score")
-    ax[1].set_ylabel("Probability")
-
-    line_data = data.transpose(0, 2, 1).tolist()
-    mpld3.plugins.connect(fig, BayesView(scatter_plot, lines[0], line_data))
-
-    return mpld3.fig_to_html(fig)
-
 
 def create_html_plot_tooltip(scores_df):
     """
@@ -168,8 +150,9 @@ def create_html_plot_tooltip(scores_df):
     }
     """
     matplotlib.rcParams.update({'font.size': 20})
-
-    fig, ax = plt.subplots(1)
+    fig = Figure()
+    canvas = FigureCanvas(fig)
+    ax = fig.add_subplot(111)
     bayes_mean = np.array(scores_df['Mean'])
     bayes_sd = np.array(scores_df['SD'])
     x = np.linspace(np.min(bayes_mean)-2*np.max(bayes_sd),
@@ -184,8 +167,10 @@ def create_html_plot_tooltip(scores_df):
 
 
     labels=[]
+    scores_df.index = scores_df.PaperID.copy()
+    del scores_df['PaperID']
     for i in range(len(scores_df)):
-        label = scores_df.ix[[i], :].T
+        label = scores_df.iloc[[i]]
         labels.append(str(label.to_html()))
 
     ax.set_xlabel('Mean Scores')
@@ -197,5 +182,4 @@ def create_html_plot_tooltip(scores_df):
                                               voffset=10,
                                               hoffset=10)
     mpld3.plugins.connect(fig, tooltip)
-
     return mpld3.fig_to_html(fig)
