@@ -32,6 +32,8 @@ class SubmitScoreInformation(forms.Form):
                     <code>Score</code>, and (optionally) <code>Confidence</code>. The <code>Confidence</code> field
                     indicates how confident the reviewer is giving the score and it should be a positive number in a
                     scale that is shared across reviews.
+                    Download <a href="https://raw.githubusercontent.com/daniel-acuna/reviewer_assignment/master/examples/scoring/scores.csv">
+                      example file</a> here.
                     </div>'''),
             Div('scores',
                 css_class="col-xs-offset-4 col-md-offset-4 col-lg-offset-4"),

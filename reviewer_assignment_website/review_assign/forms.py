@@ -41,7 +41,9 @@ class SubmitAssingmentInformation(forms.Form):
                     Upload a <code>.csv</code> file which contains two columns named <code>PersonID</code> and
                     <code>FullName</code>. This file will be used to match <code>PersonID</code> with the articles'
                     authors and reviewer's abstracts and automatically resolve conflict of interests---a reviewer should
-                     not review a co-authored article.</div>'''),
+                     not review a co-authored article. Download <a href="https://raw.githubusercontent.com/daniel-acuna/reviewer_assignment/master/examples/reviewer_assignment/people_list.csv">
+                       example file</a> here.
+                     </div>'''),
                     Div('people', title='List of people involved in the review process',
                         css_class="col-xs-offset-4 col-md-offset-4 col-lg-offset-4")
                     )
@@ -51,6 +53,8 @@ class SubmitAssingmentInformation(forms.Form):
                     Upload a <code>.csv</code> file with the columns <code>PaperID</code>, <code>Title</code>,
                     <code>Abstract</code>, and <code>PersonIDList</code>. The column <code>PersonIDList</code> contains
                     the list of IDs separated by semi-colon (e.g., <code>1; 5; 34</code>) of the article's co-authors.
+                    Download <a href="https://raw.githubusercontent.com/daniel-acuna/reviewer_assignment/master/examples/reviewer_assignment/article_list.csv">
+                      example file</a> here.
                     </div>'''),
                     Div('article_information', title='Information about articles'),
                     HTML('''<div style="padding:30px 0;">
@@ -58,6 +62,8 @@ class SubmitAssingmentInformation(forms.Form):
                     You do not always need to specify this file if all reviewers are authors of articles---we will
                     use the article's abstracts to extract the reviewers' abstracts.
                     We will use the articles' abstracts for topic modeling.
+                    Download <a href="https://raw.githubusercontent.com/daniel-acuna/reviewer_assignment/master/examples/reviewer_assignment/reviewer_list.csv">
+                      example file</a> here.
                     </div>'''),
                     Div('reviewers', title='Information about reviewers')
                 ),
@@ -66,6 +72,7 @@ class SubmitAssingmentInformation(forms.Form):
                     Upload a <code>.csv</code> file with the columns <code>PaperID</code> and <code>PersonID</code>
                     indicating which article cannot be reviewed by which person.<br />
                     <em>The system will automatically set co-authors as having conflict of interests</em>
+
                     </div>'''),
                     Div('coi', title='Conflict of interests',
                         label='Conflicts of interests',
