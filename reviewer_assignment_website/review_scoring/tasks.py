@@ -1,5 +1,6 @@
 from jobtastic import JobtasticTask
 
+import readline
 import pandas as pd
 import pandas.rpy.common as com
 import rpy2.robjects as ro
