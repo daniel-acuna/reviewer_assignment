@@ -29,7 +29,9 @@ class SubmitScoreInformation(forms.Form):
         self.helper.layout = Layout(
             HTML('''<div style="padding-bottom:30px;">
                     Upload a <code>.csv</code> file containing <code>PersonID</code>, <code>PaperID</code>,
-                    <code>Score</code>, and (optionally) <code>Confidence</code>.
+                    <code>Score</code>, and (optionally) <code>Confidence</code>. The <code>Confidence</code> field
+                    indicates how confident the reviewer is giving the score and it should be a positive number in a
+                    scale that is shared across reviews.
                     </div>'''),
             Div('scores',
                 css_class="col-xs-offset-4 col-md-offset-4 col-lg-offset-4"),

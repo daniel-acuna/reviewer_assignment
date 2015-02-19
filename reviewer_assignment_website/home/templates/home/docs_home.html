@@ -5,15 +5,26 @@
 </div>
 
 <div class="col-md-12">
-  <h3><b>About</b></h3>
-    <p>Website for automatic reviewer assignment. We apply text based analysis to match submitted articles to reviewers.
-      The website is splitting into main two parts: reviewer assignment and review scoring. The explanation will be put on soon.
+
+    <p>This website implements a reviewer-article assignment method based on topic models.
+        In this way, the assignment only depends on the article's abstracts and sample abstracts from potential reviewer.
+        This different from other methods that require either authors suggesting reviewers or reviewers bidding for
+        articles to review.
+    </p>
+    <p>Once the reviewer's score for each article are in, we have an estimator of the paper's score. This estimator
+        controls for the discrepancies in variance and mean score of reviewers --- reviewers' scores that are
+        systematically too harsh or too soft will be moved to the mean.
+    </p>
+    <p>
+        If you have any questions, please do not hessitate in asking
+        <a href="https://github.com/titipata">Titipat Achakulvisut</a> or other memebers of the team.
     </p>
 
-  <div class="container">
-    <li><a href="{% url 'review_assign.views.docs' %}">Reviewer Assignment Docs</a></li>
-    <li><a href="{% url 'review_scoring.views.docs' %}">Reviewer Scoring Docs</a></li>
-  </div>
+    <!--<p>You can read the specific documentation of each of the systems here</p>-->
+    <!--<ul>-->
+    <!--<li><a href="{% url 'review_assign.views.docs' %}">Reviewer Assignment Docs</a></li>-->
+    <!--<li><a href="{% url 'review_scoring.views.docs' %}">Reviewer Scoring Docs</a></li>-->
+    <!--</ul>-->
 
 </div>
 
