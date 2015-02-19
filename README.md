@@ -37,6 +37,12 @@ pip install -r requirement.txt
 
 In addition of the requirement, we need to install `or-tools` which has installation document on this [link](https://code.google.com/p/or-tools/wiki/AGettingStarted). For Mac OSX, you might find problem installing `or-tools` where we solve that using `easy-install` (see this [issue](https://github.com/daniel-acuna/reviewer_assignment/issues/20))
 
+For the article scoring system, you need to install the [R programming language](http://www.r-project.org/) and the `arm` library using the command
+
+```R
+install.packages('arm')
+```
+
 # Usage
 
 Local usage to launch the website can be created by hovering to where `manage.py` located. Then, you can launch celery worker by running:
