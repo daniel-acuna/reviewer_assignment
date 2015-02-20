@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% block page_title %}Automated reviewer-article assignment and manuscript scoring{% endblock %}
 {% block content %}
 {% load staticfiles %}
 <style>
@@ -72,15 +73,31 @@
 
       <div class="row featurette">
         <div class="col-md-9">
-          <h2 class="featurette-heading">Usage. <span class="text-muted">All you need are abstracts.</span></h2>
+          <h2 class="featurette-heading"><b>Assignment. </b><span class="text-muted">All you need are abstracts.</span></h2>
           <p class="lead">
-          Get the abstracts of the articles and sample abstracts of the reviewers into a <code>.csv</code> file.
-          The algorithm will do the rest. You know additional conflict of interests beyond co-authorship? No problem, upload
+          Put articles' abstracts and reviewers' abstracts into a <code>.csv</code> file.
+          The algorithm will model the interests of reviewers and topics of articles and match them.
+          You know additional conflicts of interests beyond co-authorship? No problem, upload
           an additional <code>.csv</code> file with a list of conflict of interests.
           </p>
         </div>
         <div class="col-md-3">
-          <img class="featurette-image img-responsive" src="{% static 'home/images/usage.png' %}" alt="500x500">
+          <img class="featurette-image img-responsive" src="{% static 'home/images/usage.png' %}">
+        </div>
+      </div>
+      <hr class="featurette-divider">
+      <div class="row featurette">
+        <div class="col-md-3">
+          <img class="featurette-image img-responsive" src="{% static 'home/images/scoring.png' %}">
+        </div>
+        <div class="col-md-9">
+          <h2 class="featurette-heading"><b>Scoring. </b><span class="text-muted">Correct systematic harshness.</span></h2>
+          <p class="lead">
+          Upload the list of reviewer scores and the algorithm will try to estimate the underlying article's score.
+          Have overly hash or soft reviewers? The algorithm will appropriately correct those cases. A reviewer
+          always disagrees with other reviewers and another always agrees with them? The algorithm will differently weigh their scores.
+          Oh, and the algorithm will tell you how uncertainty it is.
+          </p>
         </div>
       </div>
 

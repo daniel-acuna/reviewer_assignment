@@ -1,12 +1,11 @@
 {% extends "base.html" %}
+{% block page_title %}Manuscript scoring results{% endblock %}
 {% load django_tables2 %}
-
 {% block content %}
 <div class="col-md-12">
 
 <h2><b>Scoring result</b></h2>
 {{ scoring_plot | safe }}
-</script>
 <a class="btn btn-primary" href="{%url 'download_result_scoring' task_id=task_id%}"><i class="fa fa-download"></i>  Download Results (.CSV)</a>
     <style>
         table.score_table_style {
