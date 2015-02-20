@@ -48,7 +48,6 @@ INSTALLED_APPS = (
     'home',
     'review_assign',
     'review_scoring',
-    'ajaxuploader',
     'crispy_forms',
     'django_tables2',
     'kombu.transport.django',
