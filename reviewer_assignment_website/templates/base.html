@@ -20,28 +20,46 @@
 
   </script>
   <body>
+ <div class="wrapper">
 
-    <div class="wrapper">
-      <div class="pagetab"> <!-- tabs go here -->
-        <div class="container">
-          <li><a href="{% url 'home.views.index' %}">Home</a></li>
-          <li><a href="{% url 'review_assign_index' %}">Make assignment</a></li>
-            <li><a href="{% url 'review_scoring_index' %}">Score articles</a></li>
-          <li><a href="{% url 'home.views.docs' %}">Documentation</a></li>
-        </div>
-      </div>
-
-      <div class="container content-block">
-      {% block content %} {% endblock %}
-      </div>
-
-      <div class="pusher"></div>
-    </div>
-
-
-
-    <footer class="footer text-center">
+  <div class="navbar-wrapper">
       <div class="container">
+        <nav class="navbar navbar-inverse navbar-static-top">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="{% url 'home.views.index' %}">Reviewer assignment and article scoring</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+              <ul class="nav navbar-nav">
+                <!--<li class="active"><a href="{% url 'home.views.index' %}">Home</a></li>-->
+                <li><a href="{% url 'review_assign_index' %}">Make assignment</a></li>
+                <li><a href="{% url 'review_scoring_index' %}">Score articles</a></li>
+                <li><a href="{% url 'home.views.docs' %}">Documentation</a></li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </div>
+</div>
+<div class="container">
+{% block content %} {% endblock %}
+ <!-- FOOTER -->
+      <!--<footer>-->
+        <!--<p class="pull-right"><a href="#">Back to top</a></p>-->
+        <!--<p>&copy; 2014 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>-->
+      <!--</footer>-->
+</div>
+ <div class="pusher"></div>
+</div>
+  <div class="container">
+    <footer class="footer text-center">
+      <!--<div class="container">-->
         <p style="margin:0;">
         <i class="fa fa-user"></i> <b>Members</b> Daniel Acuna, Titipat Achakulvisut, Tulakan Ruangrong, Konrad Kording<br>
         <i class="fa fa-location-arrow"></i> <b>Location</b> Kording Lab, 345 E Superior St RM 1479<br>
@@ -51,7 +69,8 @@
         <i class="fa fa-university"></i> <b>Lab Website</b> <a href="http://klab.smpp.northwestern.edu/wiki/index.php5/Main_Page">Bayesian Behavior Lab</a> <br>
         <i class="fa fa-github-alt"></i> <b>Github</b>  <a href="https://github.com/daniel-acuna/reviewer_assignment">daniel-acuna/reviewer_assignment</a> <br>
         </p>
-      </div>
+      <!--</div>        -->
     </footer>
-  </body>
+</div>
+</body>
 </html>
