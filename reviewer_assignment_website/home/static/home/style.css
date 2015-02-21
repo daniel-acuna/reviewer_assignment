@@ -89,7 +89,7 @@ a small {
   min-height: 100%;
   height: auto !important;
   height: 100%;
-  margin: 0 auto -132px;
+  margin: 0 auto -157px;
 }
 
 /* index page goes here */
@@ -97,6 +97,15 @@ a small {
   /*padding-bottom:12em;
   padding-top:4em;*/
   /*font-size: 1.5em;*/
+}
+
+.featurette {
+  margin: 20px 0;
+}
+
+.featurette-image {
+  margin: 0 auto;
+  /*padding:10px;*/
 }
 
 .asmt_btt_grp {
@@ -113,9 +122,11 @@ a small {
 
 /* footer class goes here */
 .footer {
-  font-size: 0.8em;
-  height:132px; /*footer exact height is 112 this plus top and bottom space 10 each*/
-  width:100%;
+  border-top:1px solid #e5e5e5;
+  font-size: 1em;
+  /*height:132px; /*footer exact height is 112 this plus top and bottom space 10 each*/
+  height: 157px; /*p attribute is 147 and padding-bottom is 10*/
+  width: 100%;
   /*float:none;
   position:absolute;
   bottom:0;
@@ -123,12 +134,16 @@ a small {
   /*background-color:#EEE;*/
 }
 
-.footer .container {
-  padding-top:12px;
+.footer p {
+  margin: 0;
 }
 
+/*.footer .container {
+  padding-top:-12px;
+}*/
+
 .pusher {
-  height: 132px;
+  height:157px;
 }
 
 blockquote {
@@ -263,7 +278,6 @@ footer {
 }*/
 
 @media print, screen and (max-width: 960px) {
-
   div.wrapper {
     width:auto;
   }

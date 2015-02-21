@@ -4,7 +4,20 @@
 {% load staticfiles %}
 <style>
     .carousel-inner img {
-        margin: auto;
+      margin: auto;
+    }
+    .carousel-indicators li {
+      background-color: #555;
+    }
+    .carousel-indicators .active {
+      background-color: #ccc;
+    }
+    .carousel-inner p {
+      font-size: 20px;
+      font-weight: bold;
+    }
+    .carousel-inner a {
+      font-weight: bold;
     }
 </style>
 <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
@@ -16,22 +29,23 @@
   </ol>
 
   <!-- Wrapper for slides -->
-  <div class="carousel-inner" role="listbox">
+  <div class="carousel-inner" role="listbox" style="margin-top:-20px;">
+
     <div class="item active">
       <img src="{% static 'home/images/Solvay_conference_1927.jpg' %}">
       <div class="carousel-caption" style="background: #FFFFF;">
           <h1 style="color: #FFFFFF;"><b>Automatic Reviewer Assignment and Article Scoring Algorithms</b></h1>
           <p>
-              <a class="btn btn-default btn-lg" href="{% url 'review_assign_index' %}" role="button"><i class="fa fa-users"></i>
- Start Assignment</a>
-              or
-           <a type="button" class="btn btn-default btn-lg" href="https://github.com/daniel-acuna/reviewer_assignment" role="button">
-            <i class="fa fa-code-fork"></i> Fork on Github
+            <a class="btn btn-default btn-lg" href="{% url 'review_assign_index' %}" role="button"><i class="fa fa-users"></i>
+ Start Assignment</a>&nbsp;&nbsp;&nbsp;&nbsp; or &nbsp;&nbsp;&nbsp;
+            <a type="button" class="btn btn-default btn-lg" href="https://github.com/daniel-acuna/reviewer_assignment" role="button">
+            &nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-code-fork"></i>&nbsp;Fork on Github&nbsp;&nbsp;&nbsp;&nbsp;
             </a>
             <!--<a class="btn btn-primary btn-lg" href="https://github.com/daniel-acuna/reviewer_assignment" role="button">Fork</a>&ndash;&gt;-->
             </p>
       </div>
     </div>
+
     <div class="item">
       <img src="{% static 'home/images/matching_screenshot.png' %}">
       <!--<img src="{% static 'home/images/Solvay_conference_1927.jpg' %}">-->
@@ -40,11 +54,12 @@
         <h1 style="color: #00000;"><b>Article-reviewer matching based on topic analysis</b></h1>
         <h4 style="color: #00000;">No need for author's reviewer suggestions or reviewer manuscript bidding</h4>
         <a class="btn btn-default btn-lg" href="{% url 'review_assign_index' %}" role="button"><i class="fa fa-users"></i>
- Start Assignment</a>-->
+ Start Assignment</a>
         </p>
       </div>
     </div>
-      <div class="item">
+
+    <div class="item">
       <img src="{% static 'home/images/scoring_screenshot.png' %}">
       <!--<img src="{% static 'home/images/Solvay_conference_1927.jpg' %}">-->
         <div class="carousel-caption">
@@ -52,7 +67,7 @@
         <h4 style="color: #00000;">Automatic correction for consistently harsh or soft reviewers</h4>
         <p>
         <a class="btn btn-default btn-lg" href="{% url 'review_scoring_index' %}" role="button"><i class="fa fa-star-half-o"></i>
- Score articles</a>-->
+ Score articles</a>
         </p>
       </div>
     </div>
@@ -72,8 +87,9 @@
       <hr class="featurette-divider">
 
       <div class="row featurette">
+
         <div class="col-md-9">
-          <h2 class="featurette-heading"><b>Assignment. </b><span class="text-muted">All you need are abstracts.</span></h2>
+          <h2 class="featurette-heading"><b>Assignment - </b><span class="text-muted">all you need are abstracts.</span></h2>
           <p class="lead">
           Put articles' abstracts and reviewers' abstracts into <code>.csv</code> files.
           The algorithm will model the interests of reviewers and topics of articles and match them.
@@ -84,14 +100,18 @@
         <div class="col-md-3">
           <img class="featurette-image img-responsive" src="{% static 'home/images/usage.png' %}">
         </div>
+
       </div>
+
       <hr class="featurette-divider">
+
       <div class="row featurette">
+
         <div class="col-md-3">
           <img class="featurette-image img-responsive" src="{% static 'home/images/scoring.png' %}">
         </div>
         <div class="col-md-9">
-          <h2 class="featurette-heading"><b>Scoring. </b><span class="text-muted">Correct for systematic harshness.</span></h2>
+          <h2 class="featurette-heading"><b>Scoring - </b><span class="text-muted">correct for systematic harshness.</span></h2>
           <p class="lead">
           Upload the list of reviewer scores and the algorithm will try to estimate the underlying article's score.
           Have overly hash or soft reviewers? The algorithm will appropriately correct those cases. A reviewer
@@ -99,9 +119,10 @@
           Oh, and the algorithm will tell you how uncertain it is.
           </p>
         </div>
+
       </div>
 
-      <hr class="featurette-divider">
+
       <!-- /END THE FEATURETTES -->
  <!--</div>-->
 {% endblock %}
