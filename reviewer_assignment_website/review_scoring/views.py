@@ -36,9 +36,7 @@ class Index(FormView):
         form_class = self.get_form_class()
         form = self.get_form(form_class)
         if form.is_valid():
-            # print request.FILES['scores'].read()
-            scores = pd.DataFrame.from_csv(StringIO(request.FILES['scores'].read()),
-                                           index_col=None)
+            scores = pd.read_csv(form.cleaned_data.get("scores", False), index_col=None)
 
             task = ArticleScoring.delay_or_fail(scores=scores.to_dict())
 

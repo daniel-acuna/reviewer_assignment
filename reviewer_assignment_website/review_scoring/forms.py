@@ -1,19 +1,14 @@
 from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, ButtonHolder, Submit, Div, HTML
-from django.core.exceptions import ValidationError
-
-
-def validate_file_extension(value):
-    import os
-    ext = os.path.splitext(value.name)[1]
-    valid_extensions = ['.csv']
-    if ext not in valid_extensions:
-        raise ValidationError(u'Only CSV files allowed!')
-
+from utils import *
 
 class SubmitScoreInformation(forms.Form):
-    scores = forms.FileField(required=True, validators=[validate_file_extension])
+    scores = forms.FileField(required=True,
+                             validators=[validate_file_extension,
+                                         generate_pandas_column_validator(['PersonID', 'PaperID', 'Score'])
+                                        ]
+                            )
 
     def __init__(self, *args, **kwargs):
         super(SubmitScoreInformation, self).__init__(*args, **kwargs)

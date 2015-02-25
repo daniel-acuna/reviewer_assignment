@@ -31,41 +31,27 @@ class index(FormView):
         form_class = self.get_form_class()
         form = self.get_form(form_class)
         if form.is_valid():
-            # process files, create random names, and save to temporary folder
-            people_fn = get_file_path(str(request.FILES['people']))
-            # save files
-            default_storage.save(os.path.join('tmp', people_fn),
-                                 ContentFile(request.FILES['people'].read()))
-            article_info_fn = get_file_path(str(request.FILES['article_information']))
-            default_storage.save(os.path.join('tmp', article_info_fn),
-                                 ContentFile(request.FILES['article_information'].read()))
-            try:
-                reviewers_fn = get_file_path(str(request.FILES['reviewers']))
-                default_storage.save(os.path.join('tmp', reviewers_fn),
-                                     ContentFile(request.FILES['reviewers'].read()))
-            except Exception:
-                reviewers_fn = None
+            people_pd = pd.read_csv(form.cleaned_data['people'], index_col=None)
+            article_pd = pd.read_csv(form.cleaned_data['article_information'], index_col=None)
+            reviewer_pd = pd.read_csv(form.cleaned_data['reviewers'], index_col=None)
+            min_rev_art = form.cleaned_data['minimum_reviews_per_article']
+            max_rev_art = form.cleaned_data['maximum_reviews_per_article']
+            min_art_rev = form.cleaned_data['minimum_articles_per_reviewer']
+            max_art_rev = form.cleaned_data['maximum_articles_per_reviewer']
 
-            try:
-                coi_fn = get_file_path(str(request.FILES['coi']))
-                default_storage.save(os.path.join('tmp', coi_fn),
-                                     ContentFile(request.FILES['coi'].read()))
-            except Exception:
-                coi_fn = None
+            task = LinearProgrammingAssignment.delay_or_fail(reviewer_abstracts=reviewer_pd.Abstract.tolist(),
+                                                       article_data=article_pd.to_dict(),
+                                                       people_data=people_pd.to_dict(),
+                                                       min_rev_art=min_rev_art,
+                                                       max_rev_art=max_rev_art,
+                                                       min_art_rev=min_art_rev,
+                                                       max_art_rev=max_art_rev)
 
-            min_rev_art = request.POST['minimum_reviews_per_article']
-            max_rev_art = request.POST['maximum_reviews_per_article']
-            min_art_rev = request.POST['minimum_articles_per_reviewer']
-            max_art_rev = request.POST['maximum_articles_per_reviewer']
-            return HttpResponseRedirect(reverse('create_assignment', args=(),
-                                                kwargs={'people_fn': people_fn,
-                                                        'article_info_fn': article_info_fn,
-                                                        'reviewers_fn': reviewers_fn,
-                                                        'coi_fn': coi_fn,
-                                                        'min_rev_art': min_rev_art,
-                                                        'max_rev_art': max_rev_art,
-                                                        'min_art_rev': min_art_rev,
-                                                        'max_art_rev': max_art_rev}))
+            return render_to_response('progress.html',
+                                      {'task_id': task.task_id,
+                                       'progress_title': 'Solving the assignment problem',
+                                       'result_view': 'result',
+                                       'start_over_view': 'review_assign_index'})
         else:
             return self.form_invalid(form)
 
@@ -79,41 +65,6 @@ class AssignmentTable(tables.Table):
     PaperID = tables.Column()
     Title = tables.Column()
     Reviewers = tables.Column()
-
-def create_assignment(request, people_fn=None, article_info_fn=None, reviewers_fn=None, coi_fn=None,
-                      min_rev_art=None, max_rev_art=None, min_art_rev=None, max_art_rev=None):
-    min_rev_art = int(min_rev_art)
-    max_rev_art = int(max_rev_art)
-    min_art_rev = int(min_art_rev)
-    max_art_rev = int(max_art_rev)
-
-    # read file
-    people_path = os.path.join(settings.MEDIA_ROOT, os.path.join('tmp', people_fn))
-    people_data = pd.DataFrame.from_csv(people_path, index_col=None)
-    article_path = os.path.join(settings.MEDIA_ROOT, os.path.join('tmp', article_info_fn))
-    article_data = pd.DataFrame.from_csv(article_path, index_col=None)
-
-    if reviewers_fn <> 'None':
-        reviewers_path = os.path.join(settings.MEDIA_ROOT, os.path.join('tmp', reviewers_fn))
-        reviewers_data = pd.DataFrame.from_csv(reviewers_path, index_col=None)
-
-    if coi_fn <> 'None':
-        coi_path = os.path.join(settings.MEDIA_ROOT, os.path.join('tmp', coi_fn))
-        coi_data = pd.DataFrame.from_csv(coi_path, index_col=None)
-
-    task = LinearProgrammingAssignment.delay_or_fail(reviewer_abstracts=reviewers_data.Abstract.tolist(),
-                                                       article_data=article_data.to_dict(),
-                                                       people_data=people_data.to_dict(),
-                                                       min_rev_art=min_rev_art,
-                                                       max_rev_art=max_rev_art,
-                                                       min_art_rev=min_art_rev,
-                                                       max_art_rev=max_art_rev)
-
-    return render_to_response('progress.html',
-                              {'task_id': task.task_id,
-                               'progress_title': 'Solving the assignment problem',
-                               'result_view': 'result',
-                               'start_over_view': 'review_assign_index'})
 
 def result(request, task_id=None):
     # read from celery the results

@@ -5,19 +5,23 @@ from crispy_forms.layout import Layout, Fieldset, ButtonHolder, Submit, Div, HTM
 from crispy_forms.bootstrap import TabHolder, Tab
 from django.core.exceptions import ValidationError
 
-def validate_file_extension(value):
-    import os
-    ext = os.path.splitext(value.name)[1]
-    valid_extensions = ['.csv']
-    if not ext in valid_extensions:
-        raise ValidationError(u'Only CSV files allowed!')
+from utils import validate_file_extension, generate_pandas_column_validator
 
 class SubmitAssingmentInformation(forms.Form):
-    #paper_information = forms.FileInput(label='paper_information', required=True)
-    people = forms.FileField(required=True, validators=[validate_file_extension])
-    article_information = forms.FileField(required=True, validators=[validate_file_extension])
-    reviewers = forms.FileField(required=False, validators=[validate_file_extension])
-    coi = forms.FileField(required=False, validators=[validate_file_extension])
+    people = forms.FileField(required=True, validators=[validate_file_extension,
+                                                        generate_pandas_column_validator(['PersonID', 'FullName'])])
+    article_information = forms.FileField(required=True,
+                                          validators=[validate_file_extension,
+                                                      generate_pandas_column_validator(['PaperID',
+                                                                                        'Title',
+                                                                                        'Abstract',
+                                                                                        'PersonIDList'])])
+    reviewers = forms.FileField(required=True, validators=[validate_file_extension,
+                                                            generate_pandas_column_validator(['PersonID',
+                                                                                              'Abstract'])])
+    coi = forms.FileField(required=False, validators=[validate_file_extension,
+                                                      generate_pandas_column_validator(['PaperID',
+                                                                                        'PersonID'])])
     minimum_reviews_per_article = forms.IntegerField(initial=3, min_value=0, required=True)
     maximum_reviews_per_article = forms.IntegerField(initial=3, min_value=0, required=True)
     minimum_articles_per_reviewer = forms.IntegerField(initial=1, min_value=0, required=True)
@@ -95,4 +99,4 @@ class SubmitAssingmentInformation(forms.Form):
             )
         )
 
-        #self.helper.add_input(Submit('Make assignment', 'Make assignment'))
+
