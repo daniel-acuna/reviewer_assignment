@@ -16,7 +16,7 @@ class SubmitAssingmentInformation(forms.Form):
                                                                                         'Title',
                                                                                         'Abstract',
                                                                                         'PersonIDList'])])
-    reviewers = forms.FileField(required=True, validators=[validate_file_extension,
+    reviewers = forms.FileField(required=False, validators=[validate_file_extension,
                                                             generate_pandas_column_validator(['PersonID',
                                                                                               'Abstract'])])
     coi = forms.FileField(required=False, validators=[validate_file_extension,

@@ -31,17 +31,29 @@ class index(FormView):
         form_class = self.get_form_class()
         form = self.get_form(form_class)
         if form.is_valid():
-            people_pd = pd.read_csv(form.cleaned_data['people'], index_col=None)
-            article_pd = pd.read_csv(form.cleaned_data['article_information'], index_col=None)
-            reviewer_pd = pd.read_csv(form.cleaned_data['reviewers'], index_col=None)
+            people_data = pd.read_csv(form.cleaned_data['people'],
+                                      index_col=None).to_dict()
+            article_data = pd.read_csv(form.cleaned_data['article_information'],
+                                       index_col=None).to_dict()
+            if form.cleaned_data['reviewers'] is not None:
+                reviewer_data = pd.read_csv(form.cleaned_data['reviewers'],
+                                            index_col=None).to_dict()
+            else:
+                reviewer_data = None
+            if form.cleaned_data['coi'] is None:
+                coi_data = None
+            else:
+                coi_data = pd.read_csv(form.cleaned_data['coi'], index_col = None).to_dict()
+
             min_rev_art = form.cleaned_data['minimum_reviews_per_article']
             max_rev_art = form.cleaned_data['maximum_reviews_per_article']
             min_art_rev = form.cleaned_data['minimum_articles_per_reviewer']
             max_art_rev = form.cleaned_data['maximum_articles_per_reviewer']
 
-            task = LinearProgrammingAssignment.delay_or_fail(reviewer_abstracts=reviewer_pd.Abstract.tolist(),
-                                                       article_data=article_pd.to_dict(),
-                                                       people_data=people_pd.to_dict(),
+            task = LinearProgrammingAssignment.delay_or_fail(reviewer_data=reviewer_data,
+                                                       article_data=article_data,
+                                                       people_data=people_data,
+                                                       coi_data=coi_data,
                                                        min_rev_art=min_rev_art,
                                                        max_rev_art=max_rev_art,
                                                        min_art_rev=min_art_rev,

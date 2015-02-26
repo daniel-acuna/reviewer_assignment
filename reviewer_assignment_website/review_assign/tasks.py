@@ -14,9 +14,10 @@ from unidecode import unidecode
 class LinearProgrammingAssignment(JobtasticTask):
 
     significant_kwargs = [
-        ('reviewer_abstracts', str),
+        ('reviewer_data', str),
         ('article_data', str),
         ('people_data', str),
+        ('coi_data', str),
         ('min_rev_art', str),
         ('max_rev_art', str),
         ('min_art_rev', str),
@@ -29,7 +30,8 @@ class LinearProgrammingAssignment(JobtasticTask):
     cache_duration = -1  # No cache
     # Note: 0 means different things in different cache backends. RTFM for yours.
 
-    def calculate_result(self, reviewer_abstracts, article_data, people_data,
+    def calculate_result(self, reviewer_data, article_data, people_data,
+                         coi_data,
                          min_rev_art, max_rev_art, min_art_rev, max_art_rev):
         """
         Generates a csv file with the resulting assignment while it updates the status
@@ -41,6 +43,25 @@ class LinearProgrammingAssignment(JobtasticTask):
 
         article_data = pd.DataFrame(article_data)
         people_data = pd.DataFrame(people_data)
+        coauthors_df = pd.DataFrame([[r.PaperID, co_author]
+                                     for _, r in article_data.iterrows()
+                                     for co_author in r.PersonIDList.split(';')],
+                                    columns = ['PaperID', 'PersonID'])
+
+        if reviewer_data is None:
+            # extract reviewer data from articles
+            coauthor_articles = coauthors_df.merge(article_data)[['PersonID', 'Abstract']]
+            coauthor_abtracts = coauthor_articles.groupby('PersonID').\
+                                                  agg({'Abstract': lambda x: ''.join(x)})
+            reviewer_data = pd.DataFrame(zip(coauthor_abtracts.index,
+                                             coauthor_abtracts.Abstract),
+                                         columns=['PersonID', 'Abstract'])
+        else:
+            reviewer_data = pd.DataFrame(reviewer_data)
+            reviewer_data.PersonID = reviewer_data.PersonID.apply(lambda x: str(x))
+
+        if coi_data is not None:
+            coi_data = pd.DataFrame(coi_data)
 
         update_frequency = 1
         cur_progress += int(max_progress/6.)
@@ -52,14 +73,34 @@ class LinearProgrammingAssignment(JobtasticTask):
 
 
         # this performs the topic modeling (LSA)
-        # a = prm.compute_affinity(reviewer_abstracts[0:10], article_data.Abstract.iloc[0:10])
-        a = prm.compute_affinity(reviewer_abstracts, article_data.Abstract)
+        a = prm.compute_affinity(reviewer_data.Abstract, article_data.Abstract)
         cur_progress += int(max_progress/6.)
         self.update_progress(
                 cur_progress,
                 max_progress,
                 update_frequency=update_frequency,
             )
+
+        # if coi_data available, then add as if they were co-authors
+        if coi_data is not None:
+            coi_data.PersonID = coi_data.PersonID.apply(lambda x: str(x))
+            coauthors_df = pd.concat((coauthors_df, coi_data))
+
+
+        # articles
+        article_data2 = article_data.copy()
+        article_data2.index = article_data2.PaperID
+        article_data2['id'] = range(article_data2.shape[0])
+        coi_column = np.array(article_data2.loc[coauthors_df.PaperID].id.tolist())
+
+        # persons
+        reviewer_data2 = reviewer_data.copy()
+        reviewer_data2.index = reviewer_data2.PersonID
+        reviewer_data2['id'] = range(reviewer_data2.shape[0])
+        coi_row = np.array(reviewer_data2.loc[coauthors_df.PersonID].id.tolist())
+
+        for i, j in zip(coi_row, coi_column):
+            a[i, j] = -1000.#np.inf
 
         v, A, d = prm.create_lp_matrices(a, min_rev_art, max_rev_art,
                                           min_art_rev, max_art_rev)
