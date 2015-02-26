@@ -58,7 +58,7 @@ class LinearProgrammingAssignment(JobtasticTask):
                                          columns=['PersonID', 'Abstract'])
         else:
             reviewer_data = pd.DataFrame(reviewer_data)
-            reviewer_data.PersonID = reviewer_data.PersonID.apply(lambda x: str(x))
+            reviewer_data.PersonID = reviewer_data.PersonID.apply(str)
 
         if coi_data is not None:
             coi_data = pd.DataFrame(coi_data)
@@ -83,7 +83,7 @@ class LinearProgrammingAssignment(JobtasticTask):
 
         # if coi_data available, then add as if they were co-authors
         if coi_data is not None:
-            coi_data.PersonID = coi_data.PersonID.apply(lambda x: str(x))
+            coi_data.PersonID = coi_data.PersonID.apply(str)
             coauthors_df = pd.concat((coauthors_df, coi_data))
 
 
@@ -91,13 +91,13 @@ class LinearProgrammingAssignment(JobtasticTask):
         article_data2 = article_data.copy()
         article_data2.index = article_data2.PaperID
         article_data2['id'] = range(article_data2.shape[0])
-        coi_column = np.array(article_data2.loc[coauthors_df.PaperID].id.tolist())
+        coi_row = np.array(article_data2.loc[coauthors_df.PaperID].id.tolist())
 
         # persons
         reviewer_data2 = reviewer_data.copy()
         reviewer_data2.index = reviewer_data2.PersonID
         reviewer_data2['id'] = range(reviewer_data2.shape[0])
-        coi_row = np.array(reviewer_data2.loc[coauthors_df.PersonID].id.tolist())
+        coi_column = np.array(reviewer_data2.loc[coauthors_df.PersonID].id.tolist())
 
         for i, j in zip(coi_row, coi_column):
             a[i, j] = -1000.#np.inf
