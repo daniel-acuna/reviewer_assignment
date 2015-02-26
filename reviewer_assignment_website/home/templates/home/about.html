@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block page_title %}Documentation{% endblock %}
+{% block content %}
+<div class="col-md-12">
+    <h2><b>About</b></h2>
+</div>
+
+<div class="col-md-12">
+    <p>This website is part of the research developed at <a href="http://klab.smpp.northwestern.edu">Kording Lab</a> by <a href="http://scienceofscience.org">Daniel Acuna</a>,
+        <a href="http://titipata.github.io">Titipat Achakulvisut</a>, and
+        <a href="http://klab.smpp.northwestern.edu/wiki/index.php5/Konrad_Kording">Konrad Kording</a>.</p>
+    <p>The methods presented here aim at automating the reviewer-article assignment by using topic modeling.
+    The system only needs the article’s abstracts and samples of abstracts written by the reviewers.
+    This removes the biases introduced by either authors suggesting reviewers or reviewers bidding for their favorite articles to review.</p>
+
+    <p>Also, we have develop a new method for estimating the underlying score of an article based on judgments of
+        a set of reviewers. Our method goes beyond a simple average of the reviewers’ scores, and it controls
+        for the variances and biases of the reviewers. Sometimes reviewers are too harsh or too nice
+        compared to other reviewers and the system regresses their scores to the mean, accordingly. Also,
+        some reviewers are very variables in their reviews or others are very consistent with their peers, and
+        our system weighs their scores differntly.</p>
+
+    <p>The web implementation of this research has been possible thanks to the help of
+        <a href="https://github.com/bluenex">Tulakan Ruangrong</a>.</p>
+
+</div>
+
+
+{% endblock %}

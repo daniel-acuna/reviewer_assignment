@@ -13,6 +13,10 @@ def docs(_):
     return render_to_response('home/docs_home.html')
 
 
+def about(_):
+    return render_to_response('home/about.html')
+
+
 def cancel_task(_, task_id=None, redirect_url=None):
     """Cancels a celery tasks and redirects browser to given URL"""
     print "Cancelling task %s" % task_id
