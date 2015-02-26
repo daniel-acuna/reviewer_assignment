@@ -20,6 +20,7 @@
       font-weight: bold;
     }
 </style>
+
 <div id="fb-root"></div>
 <script>(function(d, s, id) {
   var js, fjs = d.getElementsByTagName(s)[0];
@@ -27,7 +28,14 @@
   js = d.createElement(s); js.id = id;
   js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.0";
   fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
+}(document, 'script', 'facebook-jssdk'));
+</script>
+<script>!function(d,s,id){
+  var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';
+  if(!d.getElementById(id)){js=d.createElement(s);js.id=id;
+    js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+</script>
+
 <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
   <!-- Indicators -->
   <ol class="carousel-indicators">
@@ -49,8 +57,7 @@
             <a type="button" class="btn btn-default btn-lg" href="https://github.com/daniel-acuna/reviewer_assignment" role="button">
             &nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-code-fork"></i>&nbsp;Fork on Github&nbsp;&nbsp;&nbsp;&nbsp;
             </a>
-            <!--<a class="btn btn-primary btn-lg" href="https://github.com/daniel-acuna/reviewer_assignment" role="button">Fork</a>&ndash;&gt;-->
-            </p>
+          </p>
       </div>
     </div>
 
@@ -59,12 +66,12 @@
       <!--<img src="{% static 'home/images/Solvay_conference_1927.jpg' %}">-->
         <div class="carousel-caption">
         <p>
-        <h1 style="color: #00000;"><b>Article-reviewer matching based on topic analysis</b></h1>
-        <h4 style="color: #00000;">No need for author's reviewer suggestions or reviewer manuscript bidding</h4>
-        <a class="btn btn-default btn-lg" href="{% url 'review_assign_index' %}" role="button"><i class="fa fa-users"></i>
+          <h1 style="color: #00000;"><b>Article-reviewer matching based on topic analysis</b></h1>
+          <h4 style="color: #00000;">No need for author's reviewer suggestions or reviewer manuscript bidding</h4>
+          <a class="btn btn-default btn-lg" href="{% url 'review_assign_index' %}" role="button"><i class="fa fa-users"></i>
  Start Assignment</a>
         </p>
-      </div>
+        </div>
     </div>
 
     <div class="item">
@@ -80,6 +87,7 @@
       </div>
     </div>
   </div>
+
   <!-- Controls -->
   <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
     <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
@@ -90,6 +98,7 @@
     <span class="sr-only">Next</span>
   </a>
 </div>
+
       <!-- START THE FEATURETTES -->
       <hr class="featurette-divider">
 
@@ -128,22 +137,21 @@
         </div>
 
       </div>
+
 <div class="row featurette">
-<div class="col-md-9"></div>
-<div class="col-md-3">
+  <div class="col-md-9"></div>
+  <div class="col-md-3">
+    <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://pr.scienceofscience.org" data-via="daniel_akuna">Tweet</a>
+    <div class="fb-like" data-href="https://pr.scienceofscience.org" data-layout="button_count" data-action="recommend" data-show-faces="true" data-share="true"></div>
 
-<a href="https://twitter.com/share" class="twitter-share-button" data-url="http://pr.scienceofscience.org" data-via="daniel_akuna">Tweet</a>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-<div class="fb-like" data-href="https://pr.scienceofscience.org" data-layout="button_count" data-action="recommend" data-show-faces="true" data-share="true"></div>
-<!-- Place this tag in your head or just before your close body tag. -->
-<script src="https://apis.google.com/js/platform.js" async defer></script>
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
 
-<!-- Place this tag where you want the +1 button to render. -->
+    <!-- Place this tag where you want the +1 button to render. -->
+    <div class="g-plusone" data-size="medium" data-annotation="inline" data-width="300" data-href="http://pr.scienceofscience.org"></div>
 
-<div class="g-plusone" data-size="small" data-annotation="inline" data-width="300" data-href="http://pr.scienceofscience.org"></div>
-
+  </div>
 </div>
-</div>
-      <!-- /END THE FEATURETTES -->
+<!-- /END THE FEATURETTES -->
  <!--</div>-->
 {% endblock %}
