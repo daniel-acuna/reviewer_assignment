@@ -98,5 +98,3 @@ class SubmitAssingmentInformation(forms.Form):
                        style="font-size:22px; margin-bottom:40px;")
             )
         )
-
-

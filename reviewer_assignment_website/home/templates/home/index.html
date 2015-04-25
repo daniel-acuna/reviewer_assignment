@@ -36,6 +36,9 @@
     js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
 </script>
 
+<!-- Place this tag in your head or just before your close body tag. -->
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+
 <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
   <!-- Indicators -->
   <ol class="carousel-indicators">
@@ -49,21 +52,24 @@
 
     <div class="item active">
       <img src="{% static 'home/images/Solvay_conference_1927.jpg' %}">
-      <div class="carousel-caption" style="background: #FFFFF;">
-          <h1 style="color: #FFFFFF;"><b>Automatic Reviewer Assignment and Article Scoring Algorithms</b></h1>
-          <p>
-            <a class="btn btn-default btn-lg" href="{% url 'review_assign_index' %}" role="button"><i class="fa fa-users"></i>
- Start Assignment</a>&nbsp;&nbsp;&nbsp;&nbsp; or &nbsp;&nbsp;&nbsp;
-            <a type="button" class="btn btn-default btn-lg" href="https://github.com/daniel-acuna/reviewer_assignment" role="button">
-            &nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-code-fork"></i>&nbsp;Fork on Github&nbsp;&nbsp;&nbsp;&nbsp;
-            </a>
-          </p>
-      </div>
+
+        <div class="carousel-caption" style="background: #FFFFF;">
+            <h1 style="color: #FFFFFF;"><b>Automatic Reviewer Assignment and Article Scoring Algorithms</b></h1>
+            <p>
+              <a class="btn btn-default btn-lg" href="{% url 'review_assign_index' %}" role="button"><i class="fa fa-users"></i>
+   Start Assignment</a><br/>&nbsp;&nbsp;&nbsp;&nbsp; or &nbsp;&nbsp;&nbsp;<br/>
+              <a type="button" class="btn btn-default btn-lg" href="https://github.com/daniel-acuna/reviewer_assignment" role="button">
+              &nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-code-fork"></i>&nbsp;Fork on Github&nbsp;&nbsp;&nbsp;&nbsp;
+              </a>
+            </p>
+        </div>
+
     </div>
 
     <div class="item">
       <img src="{% static 'home/images/matching_screenshot.png' %}">
       <!--<img src="{% static 'home/images/Solvay_conference_1927.jpg' %}">-->
+
         <div class="carousel-caption">
         <p>
           <h1 style="color: #00000;"><b>Article-reviewer matching based on topic analysis</b></h1>
@@ -72,11 +78,13 @@
  Start Assignment</a>
         </p>
         </div>
+
     </div>
 
     <div class="item">
       <img src="{% static 'home/images/scoring_screenshot.png' %}">
       <!--<img src="{% static 'home/images/Solvay_conference_1927.jpg' %}">-->
+
         <div class="carousel-caption">
         <h1 style="color: #00000;"><b>Bayesian scoring of articles</b></h1>
         <h4 style="color: #00000;">Automatic correction for consistently harsh or soft reviewers</h4>
@@ -84,7 +92,8 @@
         <a class="btn btn-default btn-lg" href="{% url 'review_scoring_index' %}" role="button"><i class="fa fa-star-half-o"></i>
  Score articles</a>
         </p>
-      </div>
+        </div>
+
     </div>
   </div>
 
@@ -138,20 +147,31 @@
 
       </div>
 
-<div class="row featurette">
-  <div class="col-md-9"></div>
-  <div class="col-md-3">
-    <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://pr.scienceofscience.org" data-via="daniel_akuna">Tweet</a>
-    <div class="fb-like" data-href="https://pr.scienceofscience.org" data-layout="button_count" data-action="recommend" data-show-faces="true" data-share="true"></div>
+<style>
+.social_button {
+  display: block;
+  padding: 0 0 3em 1em;
+}
 
-    <!-- Place this tag in your head or just before your close body tag. -->
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
+.fb-share {
+ margin-bottom: 5px;
+}
+
+</style>
+
+
+<div class="social_button">
+
+    <div class="twit-share"><a href="https://twitter.com/share" class="twitter-share-button" data-url="http://pr.scienceofscience.org" data-via="daniel_akuna">Tweet</a></div>
 
     <!-- Place this tag where you want the +1 button to render. -->
-    <div class="g-plusone" data-size="medium" data-annotation="inline" data-width="300" data-href="http://pr.scienceofscience.org"></div>
+    <div class="gg-share"><div class="g-plusone" data-size="medium" data-annotation="inline" data-width="300" data-href="http://pr.scienceofscience.org"></div></div>
 
-  </div>
+    <div class="fb-share"><div class="fb-like" data-href="https://pr.scienceofscience.org" data-layout="button_count" data-action="recommend" data-show-faces="true" data-share="true"></div></div>
+
 </div>
+  <!-- </div> -->
+<!-- </div> -->
 <!-- /END THE FEATURETTES -->
  <!--</div>-->
 {% endblock %}

@@ -1,0 +1,13 @@
+django==1.7.4
+numpy
+pandas
+scikit-learn
+gensim
+unidecode
+django-crispy-forms
+django-tables2
+django-celery
+jobtastic
+matplotlib
+mpld3
+rpy2

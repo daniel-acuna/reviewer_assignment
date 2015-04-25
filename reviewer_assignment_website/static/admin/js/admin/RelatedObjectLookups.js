@@ -27,22 +27,18 @@ function windowname_to_id(text) {
     return text;
 }
 
-function showAdminPopup(triggeringLink, name_regexp) {
-    var name = triggeringLink.id.replace(name_regexp, '');
+function showRelatedObjectLookupPopup(triggeringLink) {
+    var name = triggeringLink.id.replace(/^lookup_/, '');
     name = id_to_windowname(name);
-    var href = triggeringLink.href;
-    if (href.indexOf('?') == -1) {
-        href += '?_popup=1';
+    var href;
+    if (triggeringLink.href.search(/\?/) >= 0) {
+        href = triggeringLink.href + '&_popup=1';
     } else {
-        href  += '&_popup=1';
+        href = triggeringLink.href + '?_popup=1';
     }
     var win = window.open(href, name, 'height=500,width=800,resizable=yes,scrollbars=yes');
     win.focus();
     return false;
-}
-
-function showRelatedObjectLookupPopup(triggeringLink) {
-    return showAdminPopup(triggeringLink, /^lookup_/);
 }
 
 function dismissRelatedLookupPopup(win, chosenId) {
@@ -57,7 +53,17 @@ function dismissRelatedLookupPopup(win, chosenId) {
 }
 
 function showAddAnotherPopup(triggeringLink) {
-    return showAdminPopup(triggeringLink, /^add_/);
+    var name = triggeringLink.id.replace(/^add_/, '');
+    name = id_to_windowname(name);
+    var href = triggeringLink.href;
+    if (href.indexOf('?') == -1) {
+        href += '?_popup=1';
+    } else {
+        href  += '&_popup=1';
+    }
+    var win = window.open(href, name, 'height=500,width=800,resizable=yes,scrollbars=yes');
+    win.focus();
+    return false;
 }
 
 function dismissAddAnotherPopup(win, newId, newRepr) {
