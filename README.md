@@ -33,7 +33,7 @@ You can try an example website [here](http://www.scienceofscience.org/reviewer_a
 We provide `requirements.txt` for all the requirements that we need. After cloning repository, you can do:
 
 ```bash
-pip install -r requirement.txt
+pip install -r requirements.txt
 ```
 
 In addition of the requirement, we need to install `or-tools` which has installation document on this [link](https://code.google.com/p/or-tools/wiki/AGettingStarted). For Mac OSX, you might find problem installing `or-tools` where we solve that using `easy-install` (see this [issue](https://github.com/daniel-acuna/reviewer_assignment/issues/20))
